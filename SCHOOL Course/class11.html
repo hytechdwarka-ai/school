@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 11 Commerce Hub</title>
+    <style>
+        /* CSS Variables */
+        :root { --bg-color: #E0F7FA; --text-color: #333333; --nav-bg: #FF9800; --nav-text: #ffffff; --card-bg: rgba(255, 255, 255, 0.7); --border-color: #4CAF50; --display-color: #E91E63; }
+        [data-theme="dark"] { --bg-color: #1a1a2e; --text-color: #e0e0e0; --nav-bg: #e94560; --nav-text: #ffffff; --card-bg: rgba(22, 33, 62, 0.8); --border-color: #0f3460; --display-color: #ffb400; }
+        body { margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color); font-family: 'Comic Sans MS', sans-serif; text-align: center; transition: 0.4s; overflow-x: hidden; touch-action: manipulation; }
+        
+        #navbar { background-color: var(--nav-bg); color: var(--nav-text); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .nav-btn { background: rgba(255, 255, 255, 0.2); border: 2px solid #fff; color: #fff; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 22px; transition: 0.2s; }
+        .nav-btn:hover { background: #fff; color: var(--nav-bg); }
+        .category-title { font-size: 24px; font-weight: bold; }
+
+        #app-container { width: 95vw; max-width: 1000px; margin: 15px auto; background: var(--card-bg); border-radius: 25px; border: 3px solid var(--border-color); padding: 25px 15px; box-sizing: border-box; min-height: 65vh; }
+        
+        #menu-header { margin-bottom: 25px; padding: 0 10px; }
+        #menu-header h2 { font-size: 26px; font-weight: bold; color: var(--display-color); margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        #menu-header p { font-size: 16px; color: var(--text-color); line-height: 1.6; max-width: 850px; margin: 0 auto; font-weight: 500; margin-bottom: 20px;}
+        
+        .level-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
+        .level-btn { background: rgba(255,255,255,0.5); border: 3px solid #ccc; padding: 10px 30px; font-size: 18px; font-weight: bold; border-radius: 15px; cursor: pointer; transition: 0.3s; color: var(--text-color); }
+        .level-btn.active { border-color: #4CAF50; background: #4CAF50; color: white; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4); transform: scale(1.05);}
+        [data-theme="dark"] .level-btn.active { background: #E91E63; border-color: #E91E63; }
+
+        #menu-view { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 5px; }
+        .menu-card { width: 100%; aspect-ratio: 1; background: #fff; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: none; border-bottom: 8px solid transparent; transition: 0.3s; color: #333; padding: 10px; box-sizing: border-box; }
+        .menu-card:hover { transform: translateY(-6px); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
+        .menu-icon { font-size: 42px; margin-bottom: 5px; }
+        .menu-title { font-size: 14px; font-weight: bold; text-align: center; line-height: 1.3; }
+        
+        /* Menu Colors */
+        #menu-1 { border-bottom-color: #F44336; } #menu-2 { border-bottom-color: #9C27B0; } #menu-3 { border-bottom-color: #03A9F4; } #menu-4 { border-bottom-color: #4CAF50; }
+        #menu-5 { border-bottom-color: #FF9800; } #menu-6 { border-bottom-color: #795548; } #menu-7 { border-bottom-color: #E91E63; } #menu-8 { border-bottom-color: #607D8B; }
+        #menu-9 { border-bottom-color: #8E24AA; } #menu-10 { border-bottom-color: #D32F2F; } #menu-11 { border-bottom-color: #00897B; } #menu-12 { border-bottom-color: #FBC02D; }
+        #menu-13 { border-bottom-color: #8D6E63; } #menu-14 { border-bottom-color: #00BCD4; } #menu-15 { border-bottom-color: #5C6BC0; } #menu-16 { border-bottom-color: #FF5722; }
+
+        @media (max-width: 600px) {
+            #menu-view { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .menu-icon { font-size: 38px; } .menu-title { font-size: 13px; }
+            .category-title { font-size: 18px; } .nav-btn { font-size: 18px; padding: 5px 10px; }
+            #menu-header h2 { font-size: 20px; } #menu-header p { font-size: 14px; }
+        }
+        @media (min-width: 1000px) {
+            #menu-view { grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 850px; margin: 0 auto; }
+            .menu-icon { font-size: 48px; } .menu-title { font-size: 16px; }
+        }
+
+        #game-view { display: none; }
+        #guide-box { background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px; border: 2px dashed var(--border-color); font-size: 16px; color: #1565C0; font-weight: bold; margin-bottom: 15px; }
+        [data-theme="dark"] #guide-box { color: #64B5F6; background: rgba(0,0,0,0.3); }
+        #instruction-display { font-size: 24px; color: var(--display-color); font-weight: bold; margin-bottom: 10px; min-height: 40px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        
+        #timer-container { width: 80%; max-width: 400px; margin: 0 auto 20px auto; background: rgba(255,255,255,0.2); border-radius: 15px; border: 2px solid var(--border-color); position: relative; height: 28px; overflow: hidden; display: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+        #timer-bar { height: 100%; background: #4CAF50; width: 100%; transition: width 1s linear, background-color 0.5s; }
+        #timer-text { position: absolute; top: 0; left: 0; right: 0; bottom: 0; line-height: 28px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+        #game-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px; min-height: 250px; padding: 10px 0 20px 0; }
+
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px) rotate(-5deg); } 50% { transform: translateX(8px) rotate(5deg); } 75% { transform: translateX(-8px) rotate(-5deg); } }
+
+        .ans-btn { background: #fff; border: 3px solid var(--border-color); color: #333; font-size: 18px; font-weight: bold; padding: 12px 20px; border-radius: 15px; cursor: pointer; transition: 0.2s; margin: 5px; box-shadow: 0 4px 0 var(--border-color);}
+        .ans-btn:active { transform: translateY(4px); box-shadow: none; background: var(--border-color); color: white; }
+        .action-btn { background-color: #4CAF50; color: white; border: none; padding: 12px 25px; font-size: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 5px 0 #2E7D32; margin: 10px; }
+        .action-btn:active { transform: translateY(5px); box-shadow: none; }
+        .menu-return-btn { background-color: #E91E63; box-shadow: 0 5px 0 #AD1457; }
+        
+        .math-eq { font-size: 28px; font-weight: bold; color: var(--text-color); margin-bottom: 20px; background: rgba(255,255,255,0.4); padding: 15px 30px; border-radius: 20px; border: 2px dashed var(--display-color); line-height: 1.5;}
+        [data-theme="dark"] .math-eq { background: rgba(0,0,0,0.4); }
+        /* Footer Style */
+        footer {
+            margin: 20px auto 30px auto;
+            text-align: center;
+        }
+        .school-btn {
+            display: inline-block;
+            background-color: #303030;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .school-btn:hover {
+            background-color: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+        }
+		
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div id="navbar">
+        <button id="nav-home-btn" class="nav-btn" onclick="showMenu()" style="display:none;" title="Menu">🏠 મેનૂ</button>
+        <div id="nav-title" class="category-title">ધોરણ ૧૧ કોમર્સ</div>
+        <button class="nav-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+    </div>
+
+    <div id="app-container">
+        <div id="menu-header">
+            <h2>✨ કોમર્સ ફાઉન્ડેશન ક્વિઝ! ✨</h2>
+            <p>
+                ધોરણ ૧૧ કોમર્સના વિદ્યાર્થીઓ માટે નામાનાં મૂળતત્વો (Accounts), આંકડાશાસ્ત્ર (Stat), અર્થશાસ્ત્ર (Eco) અને વાણિજ્ય વ્યવસ્થા (B.A.) ની શાનદાર પ્રેક્ટિસ. 💼<br>
+                તમારો કોમર્સનો પાયો મજબૂત કરો!
+            </p>
+            <div class="level-container">
+                <button id="btn-lvl-1" class="level-btn active" onclick="setLevel(1)">સરળ (Easy)</button>
+                <button id="btn-lvl-2" class="level-btn" onclick="setLevel(2)">અઘરું (Hard)</button>
+            </div>
+        </div>
+        
+        <div id="menu-view">
+            <!-- Commerce Core Subjects -->
+            <div class="menu-card" id="menu-1" onclick="startGame('acc1')"><div class="menu-icon">📒</div><div class="menu-title">૧. નામાનાં મૂળતત્વો</div></div>
+            <div class="menu-card" id="menu-2" onclick="startGame('acc2')"><div class="menu-icon">✍️</div><div class="menu-title">૨. આમનોંધ-ખાતાવહી</div></div>
+            <div class="menu-card" id="menu-3" onclick="startGame('stat1')"><div class="menu-icon">📊</div><div class="menu-title">૩. આંકડાશાસ્ત્ર (મધ્યક)</div></div>
+            <div class="menu-card" id="menu-4" onclick="startGame('stat2')"><div class="menu-icon">📈</div><div class="menu-title">૪. પ્રસારમાન</div></div>
+            
+            <!-- Theory Subjects -->
+            <div class="menu-card" id="menu-5" onclick="startGame('eco1')"><div class="menu-icon">💰</div><div class="menu-title">૫. અર્થશાસ્ત્ર પરિચય</div></div>
+            <div class="menu-card" id="menu-6" onclick="startGame('eco2')"><div class="menu-icon">📉</div><div class="menu-title">૬. માંગ અને પુરવઠો</div></div>
+            <div class="menu-card" id="menu-7" onclick="startGame('ba1')"><div class="menu-icon">🏢</div><div class="menu-title">૭. ધંધાકીય વ્યવસ્થા</div></div>
+            <div class="menu-card" id="menu-8" onclick="startGame('ba2')"><div class="menu-icon">🏭</div><div class="menu-title">૮. કંપની સ્વરૂપ</div></div>
+            
+            <!-- Other Subjects -->
+            <div class="menu-card" id="menu-9" onclick="startGame('spcc')"><div class="menu-icon">✉️</div><div class="menu-title">૯. SP & CC (પત્રો)</div></div>
+            <div class="menu-card" id="menu-10" onclick="startGame('comp')"><div class="menu-icon">💻</div><div class="menu-title">૧૦. કમ્પ્યુટર પરિચય</div></div>
+            <div class="menu-card" id="menu-11" onclick="startGame('guj1')"><div class="menu-icon">📝</div><div class="menu-title">૧૧. ગુજરાતી વ્યાકરણ</div></div>
+            <div class="menu-card" id="menu-12" onclick="startGame('guj2')"><div class="menu-icon">📚</div><div class="menu-title">૧૨. ગુજરાતી સાહિત્ય</div></div>
+            
+            <!-- Language & GK -->
+            <div class="menu-card" id="menu-13" onclick="startGame('eng1')"><div class="menu-icon">⏳</div><div class="menu-title">૧૩. English Tenses</div></div>
+            <div class="menu-card" id="menu-14" onclick="startGame('eng2')"><div class="menu-icon">🗣️</div><div class="menu-title">૧૪. Direct-Indirect</div></div>
+            <div class="menu-card" id="menu-15" onclick="startGame('maths')"><div class="menu-icon">🧮</div><div class="menu-title">૧૫. બેઝિક ગણિત</div></div>
+            <div class="menu-card" id="menu-16" onclick="startGame('com_gk')"><div class="menu-icon">🌍</div><div class="menu-title">૧૬. Commerce GK</div></div>
+        </div>
+
+        <div id="game-view">
+            <div id="guide-box">Guide Text</div>
+            <div id="instruction-display">Instruction Text</div>
+            <div id="timer-container"><div id="timer-bar"></div><div id="timer-text">⏳ 60</div></div>
+            <div id="game-area"></div>
+            <div id="controls-area"></div>
+        </div>
+    </div>
+	 <!-- FOOTER -->
+    <footer>
+        <a href="index.html" class="school-btn">🏫 આપણી ડિજિટલ સ્કૂલ</a>
+    </footer>
+
+    <script>
+        let isDarkMode = true; 
+        let currentLevel = 1; 
+        let currentGameType = '';
+        const gameArea = document.getElementById('game-area');
+        const instruction = document.getElementById('instruction-display');
+        const controls = document.getElementById('controls-area');
+
+        // --- DATA ARRAYS CLASS 11 COMMERCE ---
+        const acc1Data = [
+            {q:'મૂડી ખાતાની બાકી હંમેશા કેવી હોય છે?', a:'જમા', w:['ઉધાર', 'શૂન્ય', 'સરભર', 'ઉધાર કે જમા', 'કોઈ નહિ', 'આવક', 'ખર્ચ']},
+            {q:'ઉપાડ ખાતાની બાકી હંમેશા કેવી હોય છે?', a:'ઉધાર', w:['જમા', 'શૂન્ય', 'સરભર', 'ઉધાર કે જમા', 'કોઈ નહિ', 'આવક', 'જવાબદારી']},
+            {q:'મિલકત વધે તો કયો નિયમ લાગુ પડે?', a:'મિલકત ખાતે ઉધાર કરો', w:['મિલકત ખાતે જમા કરો', 'મૂડી ખાતે જમા કરો', 'દેવા ખાતે ઉધાર કરો', 'ઉપજ ખાતે જમા કરો', 'રોકડ ખાતે જમા કરો']},
+            {q:'નામાના પિતા તરીકે કોને ઓળખવામાં આવે છે?', a:'લ્યુકા પેસિઓલી', w:['એડમ સ્મિથ', 'આલ્ફ્રેડ માર્શલ', 'ચાણક્ય', 'પિગુ', 'કૌટિલ્ય']}
+        ];
+        const acc2Data = [
+            {q:'માલ ખરીદવામાં આવે ત્યારે કયું ખાતું ઉધાર થાય છે?', a:'ખરીદ ખાતું', w:['રોકડ ખાતું', 'વેચાણ ખાતું', 'લેણદાર ખાતું', 'દેવાદાર ખાતું', 'મૂડી ખાતું']},
+            {q:'માલ વેચવામાં આવે ત્યારે કયું ખાતું જમા થાય છે?', a:'વેચાણ ખાતું', w:['ખરીદ ખાતું', 'રોકડ ખાતું', 'લેણદાર ખાતું', 'બેંક ખાતું', 'વટાવ ખાતું']},
+            {q:'આમનોંધના ચોપડા પરથી ખાતાવહીમાં નોંધ કરવાની પ્રક્રિયા એટલે?', a:'ખતવણી (Posting)', w:['સરવાળો કરવો', 'બાકી કાઢવી', 'કાચું સરવૈયું', 'પાકું સરવૈયું', 'રોકડમેળ']},
+            {q:'વ્યક્તિ ખાતાનો નિયમ શું છે?', a:'લેનાર ખાતે ઉધાર, આપનાર ખાતે જમા', w:['આવે તે ઉધાર, જાય તે જમા', 'ખર્ચ ઉધાર, ઊપજ જમા', 'આવે તે જમા, જાય તે ઉધાર', 'લેનાર જમા, આપનાર ઉધાર', 'કોઈ નહિ']}
+        ];
+        const stat1Data = [
+            {q:'બધા જ અવલોકનોના સરવાળાને તેમની સંખ્યા વડે ભાગતા શું મળે?', a:'મધ્યક (Mean)', w:['મધ્યસ્થ (Median)', 'બહુલક (Mode)', 'વિસ્તાર (Range)', 'ચતુર્થક', 'પ્રમાણિત વિચલન']},
+            {q:'માહિતીમાં સૌથી વધુ વખત પુનરાવર્તન પામતા અવલોકનને શું કહેવાય?', a:'બહુલક (Mode)', w:['મધ્યક (Mean)', 'મધ્યસ્થ (Median)', 'વિસ્તાર (Range)', 'સરેરાશ', 'મધ્યબિંદુ']},
+            {q:'માહિતીને ચડતા કે ઉતરતા ક્રમમાં ગોઠવ્યા પછી બરાબર મધ્યમાં આવતું અવલોકન એટલે?', a:'મધ્યસ્થ (Median)', w:['મધ્યક (Mean)', 'બહુલક (Mode)', 'વિસ્તાર (Range)', 'વિચરણ', 'પ્રમાણિત વિચલન']}
+        ];
+        const stat2Data = [
+            {q:'સૌથી મોટા અને સૌથી નાના અવલોકન વચ્ચેના તફાવતને શું કહે છે?', a:'વિસ્તાર (Range)', w:['મધ્યસ્થ', 'ચતુર્થક વિચલન', 'પ્રમાણિત વિચલન', 'સરેરાશ વિચલન', 'બહુલક']},
+            {q:'પ્રસારમાનનું સૌથી શ્રેષ્ઠ અને પ્રચલિત માપ કયું છે?', a:'પ્રમાણિત વિચલન', w:['વિસ્તાર', 'વિચરણ', 'ચતુર્થક વિચલન', 'સરેરાશ વિચલન', 'મધ્યક']},
+            {q:'પ્રમાણિત વિચલનના વર્ગને શું કહેવાય છે?', a:'વિચરણ (Variance)', w:['વિસ્તાર', 'ચલનાંક', 'પ્રમાણિત દોષ', 'સરેરાશ વિચલન', 'સહસંબંધ']}
+        ];
+        const eco1Data = [
+            {q:'અર્થશાસ્ત્રના પિતા કોને ગણવામાં આવે છે?', a:'એડમ સ્મિથ', w:['આલ્ફ્રેડ માર્શલ', 'રોબિન્સ', 'પીગુ', 'કેઈન્સ', 'કૌટિલ્ય']},
+            {q:'ચાણક્ય (કૌટિલ્ય) ના અર્થશાસ્ત્રના પુસ્તકનું નામ શું છે?', a:'અર્થશાસ્ત્ર', w:['વેલ્થ ઓફ નેશન્સ', 'રાજનીતિ', 'અર્થવિજ્ઞાન', 'સમાજશાસ્ત્ર', 'નીતિશાસ્ત્ર']},
+            {q:'કઈ પ્રવૃત્તિનો હેતુ નાણાં કમાવવાનો હોતો નથી?', a:'બિનઆર્થિક પ્રવૃત્તિ', w:['આર્થિક પ્રવૃત્તિ', 'ધંધો', 'રોજગાર', 'વ્યવસાય', 'વેપાર']}
+        ];
+        const eco2Data = [
+            {q:'કિંમત અને માંગ વચ્ચે કેવો સંબંધ છે?', a:'વ્યસ્ત (Inverse)', w:['સીધો (Direct)', 'ધન (Positive)', 'કોઈ સંબંધ નથી', 'સમાન', 'શૂન્ય']},
+            {q:'કિંમત અને પુરવઠા વચ્ચે કેવો સંબંધ છે?', a:'સીધો (Direct)', w:['વ્યસ્ત (Inverse)', 'ઋણ (Negative)', 'કોઈ સંબંધ નથી', 'વિરોધી', 'શૂન્ય']},
+            {q:'અન્ય પરિબળો યથાવત રહેતાં કિંમત ઘટવાથી માંગમાં શું થાય?', a:'વિસ્તરણ (વધારો)', w:['સંકોચન (ઘટાડો)', 'સ્થિર રહે', 'શૂન્ય થાય', 'કોઈ ફેર ન પડે', 'પુરવઠો ઘટે']}
+        ];
+        const ba1Data = [
+            {q:'હિન્દુ અવિભક્ત કુટુંબ (HUF) ની પેઢીમાં વડાને શું કહે છે?', a:'કર્તા', w:['મેનેજર', 'માલિક', 'સંચાલક', 'પ્રમુખ', 'ભાગીદાર']},
+            {q:'ભાગીદારી પેઢીમાં ઓછામાં ઓછા કેટલા સભ્યો હોવા જોઈએ?', a:'બે (૨)', w:['એક (૧)', 'ત્રણ (૩)', 'સાત (૭)', 'દસ (૧૦)', 'પચાસ (૫૦)']},
+            {q:'વેપાર અને તેને સહાયક સેવાઓ એટલે શું?', a:'વાણિજ્ય (Commerce)', w:['ધંધો (Business)', 'રોજગાર', 'વ્યવસાય', 'ઉદ્યોગ', 'ઉત્પાદન']}
+        ];
+        const ba2Data = [
+            {q:'કંપનીના સાચા માલિકો કોણ ગણાય છે?', a:'ઇક્વિટી શેરહોલ્ડર્સ', w:['પ્રેફરન્સ શેરહોલ્ડર્સ', 'ડિબેન્ચર હોલ્ડર્સ', 'મેનેજિંગ ડિરેક્ટર', 'સરકાર', 'બેંક']},
+            {q:'કંપનીની નોંધણીનું પ્રમાણપત્ર મેળવવા કયો દસ્તાવેજ ફરજિયાત છે?', a:'આવેદનપત્ર (Memorandum)', w:['નિયમનપત્ર (Articles)', 'વિજ્ઞાપનપત્ર', 'શેર સર્ટિફિકેટ', 'ઓડિટ રિપોર્ટ', 'કરારનામું']},
+            {q:'સહકારી મંડળીનો મુખ્ય હેતુ શું હોય છે?', a:'સભ્યોની સેવા', w:['નફો કમાવવો', 'સત્તા જમાવવી', 'ટેક્સ બચાવવો', 'વેપાર વધારવો', 'ઉત્પાદન કરવું']}
+        ];
+        const spccData = [
+            {q:'વાણિજ્યિક પત્રવ્યવહાર (Commercial Correspondence) નો મુખ્ય હેતુ?', a:'ધંધાકીય માહિતીની આપ-લે', w:['મિત્રતા વધારવી', 'સરકારી કામકાજ', 'અંગત વાતચીત', 'સમાચાર છાપવા', 'વાર્તા લખવી']},
+            {q:'પૂછપરછના પત્રોનો મુખ્ય ઉદ્દેશ્ય શું હોય છે?', a:'ભાવ અને શરતો જાણવી', w:['ઓર્ડર આપવો', 'ફરિયાદ કરવી', 'પૈસા માંગવા', 'માલ પરત કરવો', 'ધમકી આપવી']},
+            {q:'પત્રમાં "CC" નું પૂરું નામ શું છે?', a:'Carbon Copy', w:['Copy Cat', 'Clear Copy', 'Commercial Copy', 'Cash Copy', 'Current Copy']}
+        ];
+        const compData = [
+            {q:'RAM નું પૂરું નામ શું છે?', a:'Random Access Memory', w:['Read Access Memory', 'Run All Memory', 'Real Active Memory', 'Read And Memorize', 'Random Active Memory']},
+            {q:'કમ્પ્યુટરનું મગજ કોને કહેવાય છે?', a:'CPU', w:['Monitor', 'Mouse', 'Keyboard', 'Hard Disk', 'RAM']},
+            {q:'WWW નું પૂરું નામ શું છે?', a:'World Wide Web', w:['World Web Wide', 'Word Wide Web', 'World Wide Word', 'Web World Wide', 'World Windows Web']}
+        ];
+        const guj1Data = [
+            {q:'"નવરાત્રિ" શબ્દનો સમાસ ઓળખાવો.', a:'દ્વિગુ સમાસ', w:['દ્વંદ્વ', 'તત્પુરુષ', 'બહુવ્રીહિ', 'કર્મધારય', 'અવ્યયીભાવ']},
+            {q:'"માતાપિતા" શબ્દનો સમાસ ઓળખાવો.', a:'દ્વંદ્વ સમાસ', w:['દ્વિગુ', 'તત્પુરુષ', 'બહુવ્રીહિ', 'કર્મધારય', 'ઉપપદ']},
+            {q:'"શિયાળો" નો વિરોધી શબ્દ આપો.', a:'ઉનાળો', w:['ચોમાસું', 'વસંત', 'પાનખર', 'ગરમી', 'ઠંડી']}
+        ];
+        const guj2Data = [
+            {q:'"માનવીની ભવાઈ" મહાનવલકથાના લેખક કોણ છે?', a:'પન્નાલાલ પટેલ', w:['ઝવેરચંદ મેઘાણી', 'કનૈયાલાલ મુનશી', 'નર્મદ', 'ઉમાશંકર જોશી', 'ગોવર્ધનરામ ત્રિપાઠી']},
+            {q:'"જય જય ગરવી ગુજરાત" કાવ્ય કોણે લખ્યું છે?', a:'કવિ નર્મદ', w:['દલપતરામ', 'ઉમાશંકર જોશી', 'મેઘાણી', 'સુંદરમ્', 'કલાપી']},
+            {q:'રાષ્ટ્રીય શાયરનું બિરુદ કોને મળ્યું છે?', a:'ઝવેરચંદ મેઘાણી', w:['ઉમાશંકર જોશી', 'નર્મદ', 'દલપતરામ', 'કલાપી', 'સ્નેહરશ્મિ']}
+        ];
+        const eng1Data = [
+            {q:'He usually ___ (go) to school at 8 AM.', a:'goes', w:['go', 'going', 'gone', 'went', 'is go']},
+            {q:'I ___ (watch) TV when he came.', a:'was watching', w:['watch', 'am watching', 'were watching', 'watched', 'will watch']},
+            {q:'They ___ (finish) their work just now.', a:'have finished', w:['has finished', 'finished', 'finish', 'are finishing', 'finishes']}
+        ];
+        const eng2Data = [
+            {q:'Change to Indirect: He said, "I am busy."', a:'He said that he was busy.', w:['He said that he is busy.', 'He told he was busy.', 'He says he is busy.', 'He said he am busy.', 'He asked if he was busy.']},
+            {q:'Change to Passive: "They play cricket."', a:'Cricket is played by them.', w:['Cricket was played by them.', 'Cricket is playing by them.', 'They are playing cricket.', 'Cricket plays them.', 'Cricket has played by them.']},
+            {q:'Add Question Tag: "Let us go, ___?"', a:'shall we?', w:['will you?', 'do we?', 'are we?', 'can we?', 'should we?']}
+        ];
+        const mathsData = [
+            {q:'૧૨% ના ૫૦૦૦ કેટલા થાય?', a:'૬૦૦', w:['૧૨૦૦', '૫૦૦', '૬૦', '૬૦૦૦', '૫૦']},
+            {q:'૧૫ નો વર્ગ (Square) કેટલો થાય?', a:'૨૨૫', w:['૨૫૦', '૧૨૫', '૧૫૦', '૩૦૦', '૨૭૫']},
+            {q:'₹૨૦૦૦ પર ૧૦% લેખે ૧ વર્ષનું વ્યાજ?', a:'₹૨૦૦', w:['₹૧૦૦', '₹૪૦૦', '₹૨૦૦૦', '₹૧૦', '₹૫૦']}
+        ];
+        const comGkData = [
+            {q:'ભારતમાં નાણાકીય વર્ષ (Financial Year) ક્યારે શરૂ થાય છે?', a:'૧ એપ્રિલ', w:['૧ જાન્યુઆરી', '૩૧ માર્ચ', '૧ મે', '૧ જુલાઈ', '૧ ઓક્ટોબર']},
+            {q:'ભારતની મધ્યસ્થ બેંક (Central Bank) કઈ છે?', a:'RBI', w:['SBI', 'BOI', 'HDFC', 'ICICI', 'PNB']},
+            {q:'GST નું પૂરું નામ શું છે?', a:'Goods and Services Tax', w:['General Sales Tax', 'Goods and Sales Tax', 'Government Service Tax', 'Gross State Tax', 'Global Sales Tax']}
+        ];
+
+        const winMessages = ["એકદમ સાચો જવાબ! 🎓", "બોર્ડમાં સારા માર્ક્સ પાક્કા! 🌟", "ખૂબ સરસ પર્ફોર્મન્સ! 🎉", "શાબાશ! કીપ ઈટ અપ! 🏅", "બ્રિલિયન્ટ! 🧠"];
+
+        function getOptCount() { return currentLevel === 1 ? 4 : 6; } 
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playPopSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); 
+            gain.gain.setValueAtTime(1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+        function playErrorSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15); 
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        let timerInterval;
+        function startTimer() {
+            let tc = document.getElementById('timer-container');
+            tc.style.display = 'block';
+            let duration = currentLevel === 1 ? 60 : 40; 
+            let timeLeft = duration;
+            document.getElementById('timer-bar').style.width = '100%';
+            document.getElementById('timer-bar').style.backgroundColor = '#4CAF50';
+            document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+                let pct = (timeLeft / duration) * 100;
+                document.getElementById('timer-bar').style.width = pct + '%';
+                if(pct <= 30) document.getElementById('timer-bar').style.backgroundColor = '#F44336';
+                else if(pct <= 60) document.getElementById('timer-bar').style.backgroundColor = '#FF9800';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    playErrorSound();
+                    instruction.style.color = 'red';
+                    instruction.innerHTML = "સમય પૂરો! (Time's Up!) ⏰";
+                    tc.style.display = 'none'; 
+                    document.querySelectorAll('.ans-btn').forEach(btn => { btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6';});
+                }
+            }, 1000);
+        }
+        function hideTimer() { clearInterval(timerInterval); document.getElementById('timer-container').style.display = 'none'; }
+
+        function toggleTheme() { isDarkMode = !isDarkMode; document.body.setAttribute('data-theme', isDarkMode ? 'dark' : ''); }
+        function showMenu() {
+            hideTimer(); document.getElementById('menu-view').style.display = 'grid'; document.getElementById('menu-header').style.display = 'block';
+            document.getElementById('game-view').style.display = 'none'; document.getElementById('nav-home-btn').style.display = 'none'; document.getElementById('nav-title').innerText = 'ધોરણ ૧૧ કોમર્સ';
+        }
+        function setLevel(lvl) {
+            currentLevel = lvl; document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active')); document.getElementById(`btn-lvl-${lvl}`).classList.add('active');
+        }
+        function showGameUI(title, guideText) {
+            hideTimer(); document.getElementById('menu-view').style.display = 'none'; document.getElementById('menu-header').style.display = 'none';
+            document.getElementById('game-view').style.display = 'block'; document.getElementById('nav-home-btn').style.display = 'inline-block';
+            document.getElementById('nav-title').innerText = title + (currentLevel === 1 ? ' (સરળ)' : ' (અઘરું)');
+            document.getElementById('guide-box').innerText = guideText; gameArea.innerHTML = ''; controls.innerHTML = '';
+        }
+        function setGameControls(restartFunc) { controls.innerHTML = `<button class="action-btn" onclick="${restartFunc}">ફરી રમો 🔄</button> <button class="action-btn menu-return-btn" onclick="showMenu()">મેનૂમાં પાછા 🏠</button>`; }
+        function showWinState() {
+            hideTimer(); instruction.innerHTML = ""; let randomMsg = winMessages[Math.floor(Math.random() * winMessages.length)];
+            gameArea.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; animation: float 2s infinite;"><div style="font-size: 80px; margin-bottom: 10px;">🏆</div><h2 style="color:var(--display-color); font-size: 28px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); text-align:center;">${randomMsg}</h2></div>`;
+        }
+
+        function startGame(type) {
+            currentGameType = type;
+            if (type === 'acc1') playSpecificQARound('૧. નામાનાં મૂળતત્વો', 'નામાના નિયમો અને સિદ્ધાંતો!', acc1Data);
+            if (type === 'acc2') playSpecificQARound('૨. આમનોંધ-ખાતાવહી', 'આમનોંધ અને ખતવણીના પ્રશ્નો!', acc2Data);
+            if (type === 'stat1') playSpecificQARound('૩. આંકડાશાસ્ત્ર (મધ્યક)', 'મધ્યવર્તી સ્થિતિના માપો!', stat1Data);
+            if (type === 'stat2') playSpecificQARound('૪. પ્રસારમાન', 'પ્રસારમાન અને તેના માપો!', stat2Data);
+            if (type === 'eco1') playSpecificQARound('૫. અર્થશાસ્ત્ર પરિચય', 'અર્થશાસ્ત્રના મૂળભૂત ખ્યાલો!', eco1Data);
+            if (type === 'eco2') playSpecificQARound('૬. માંગ અને પુરવઠો', 'માંગ અને પુરવઠાના નિયમો!', eco2Data);
+            if (type === 'ba1') playSpecificQARound('૭. ધંધાકીય વ્યવસ્થા', 'ધંધાના સ્વરૂપો ઓળખો!', ba1Data);
+            if (type === 'ba2') playSpecificQARound('૮. કંપની સ્વરૂપ', 'કંપની અને સહકારી મંડળી!', ba2Data);
+            if (type === 'spcc') playSpecificQARound('૯. SP & CC', 'વાણિજ્યિક પત્રવ્યવહાર!', spccData);
+            if (type === 'comp') playSpecificQARound('૧૦. કમ્પ્યુટર પરિચય', 'કમ્પ્યુટરના મૂળભૂત પ્રશ્નો!', compData);
+            if (type === 'guj1') playSpecificQARound('૧૧. ગુજરાતી વ્યાકરણ', 'સમાસ અને વિરોધી શબ્દો!', guj1Data);
+            if (type === 'guj2') playSpecificQARound('૧૨. ગુજરાતી સાહિત્ય', 'સાહિત્યકારો અને કૃતિઓ!', guj2Data);
+            if (type === 'eng1') playSpecificQARound('૧૩. English Tenses', 'Fill in the blanks with correct Tense!', eng1Data);
+            if (type === 'eng2') playSpecificQARound('૧૪. Direct-Indirect', 'English Grammar Mix!', eng2Data);
+            if (type === 'maths') playSpecificQARound('૧૫. બેઝિક ગણિત', 'ગણતરી કરી જવાબ આપો!', mathsData);
+            if (type === 'com_gk') playSpecificQARound('૧૬. Commerce GK', 'કોમર્સનું સામાન્ય જ્ઞાન!', comGkData);
+        }
+
+        function playSpecificQARound(title, guide, dataset) {
+            showGameUI(title, guide); setGameControls(`startGame('${currentGameType}')`);
+            let targetIdx = Math.floor(Math.random() * dataset.length); let targetItem = dataset[targetIdx];
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = 'સાચો વિકલ્પ પસંદ કરો!';
+            
+            let fSize = targetItem.q.length > 50 ? '20px' : '26px';
+            gameArea.innerHTML = `<div class="math-eq" style="font-size:${fSize}; padding:15px; margin-bottom:10px;">${targetItem.q}</div>`;
+            
+            let optsCount = getOptCount(); let options = [targetItem.a];
+            let pool = [...targetItem.w].sort(() => 0.5 - Math.random());
+            let maxToAdd = Math.min(optsCount - 1, pool.length);
+            for(let i=0; i<maxToAdd; i++) options.push(pool[i]);
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            bc.style.display = 'flex'; bc.style.flexDirection = 'column'; bc.style.alignItems = 'center'; bc.style.width = '100%';
+            
+            options.forEach((optText) => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; 
+                btn.style.fontSize = optText.length > 20 ? '16px' : '18px'; 
+                btn.style.width = '95%'; btn.style.margin = '5px auto'; btn.style.padding = '12px 10px';
+                btn.innerText = optText;
+                btn.onclick = function() {
+                    hideTimer();
+                    if (optText === targetItem.a) { playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; }
+                }; bc.appendChild(btn);
+            });
+            gameArea.appendChild(bc); startTimer(); 
+        }
+    </script>
+</body>
+</html>

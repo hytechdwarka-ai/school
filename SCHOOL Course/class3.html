@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 3 Learning Hub (ધોરણ 3)</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-color: #E0F7FA; --text-color: #333333;
+            --nav-bg: #FF9800; --nav-text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --border-color: #4CAF50; --display-color: #E91E63;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e; --text-color: #e0e0e0;
+            --nav-bg: #e94560; --nav-text: #ffffff;
+            --card-bg: rgba(22, 33, 62, 0.8);
+            --border-color: #0f3460; --display-color: #ffb400;
+        }
+
+        body {
+            margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color);
+            font-family: 'Comic Sans MS', sans-serif; text-align: center; transition: 0.4s; overflow-x: hidden; touch-action: manipulation;
+        }
+
+        /* Top Navigation */
+        #navbar {
+            background-color: var(--nav-bg); color: var(--nav-text); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2); border: 2px solid #fff; color: #fff; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 22px; transition: 0.2s;
+        }
+        .nav-btn:hover { background: #fff; color: var(--nav-bg); }
+        .category-title { font-size: 24px; font-weight: bold; }
+
+        /* Main App Container */
+        #app-container {
+            width: 95vw; max-width: 950px; margin: 15px auto; background: var(--card-bg);
+            border-radius: 25px; border: 3px solid var(--border-color); padding: 25px 15px; box-sizing: border-box; min-height: 65vh;
+        }
+
+        /* --- Menu Header & Paragraph --- */
+        #menu-header { margin-bottom: 25px; padding: 0 10px; }
+        #menu-header h2 { font-size: 26px; font-weight: bold; color: var(--display-color); margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        #menu-header p { font-size: 16px; color: var(--text-color); line-height: 1.6; max-width: 750px; margin: 0 auto; font-weight: 500; margin-bottom: 20px;}
+        
+        /* Level Selector */
+        .level-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
+        .level-btn {
+            background: rgba(255,255,255,0.5); border: 3px solid #ccc; padding: 10px 30px; font-size: 18px; font-weight: bold;
+            border-radius: 15px; cursor: pointer; transition: 0.3s; color: var(--text-color);
+        }
+        .level-btn.active { border-color: #4CAF50; background: #4CAF50; color: white; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4); transform: scale(1.05);}
+        [data-theme="dark"] .level-btn.active { background: #E91E63; border-color: #E91E63; box-shadow: 0 4px 10px rgba(233, 30, 99, 0.4); }
+
+        /* --- Menu View (Grid Layout) --- */
+        #menu-view { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; padding: 5px; }
+        .menu-card {
+            width: 100%; aspect-ratio: 1; background: #fff; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: none; border-bottom: 8px solid transparent; transition: 0.3s; color: #333; padding: 10px; box-sizing: border-box;
+        }
+        .menu-card:hover { transform: translateY(-6px); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
+        .menu-icon { font-size: 42px; margin-bottom: 5px; }
+        .menu-title { font-size: 14px; font-weight: bold; text-align: center; line-height: 1.2; word-wrap: break-word; }
+        
+        /* Menu Colors */
+        #menu-1 { border-bottom-color: #F44336; } #menu-2 { border-bottom-color: #9C27B0; }
+        #menu-3 { border-bottom-color: #03A9F4; } #menu-4 { border-bottom-color: #4CAF50; }
+        #menu-5 { border-bottom-color: #FF9800; } #menu-6 { border-bottom-color: #795548; }
+        #menu-7 { border-bottom-color: #E91E63; } #menu-8 { border-bottom-color: #607D8B; }
+        #menu-9 { border-bottom-color: #8E24AA; } #menu-10 { border-bottom-color: #D32F2F; }
+        #menu-11 { border-bottom-color: #00897B; } #menu-12 { border-bottom-color: #FBC02D; }
+        #menu-13 { border-bottom-color: #8D6E63; } #menu-14 { border-bottom-color: #00BCD4; }
+        #menu-15 { border-bottom-color: #5C6BC0; } #menu-16 { border-bottom-color: #FF5722; }
+
+        @media (max-width: 600px) {
+            #menu-view { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .menu-icon { font-size: 38px; } .menu-title { font-size: 13px; }
+            .category-title { font-size: 18px; } .nav-btn { font-size: 18px; padding: 5px 10px; }
+            #menu-header h2 { font-size: 20px; } #menu-header p { font-size: 14px; }
+            #app-container { padding: 15px 10px; margin: 10px; }
+            .level-btn { font-size: 15px; padding: 8px 20px;}
+        }
+        
+        @media (min-width: 1000px) {
+            #menu-view { grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 800px; margin: 0 auto; }
+            .menu-icon { font-size: 48px; } .menu-title { font-size: 16px; }
+            #app-container { padding: 35px; }
+        }
+
+        /* --- Game View --- */
+        #game-view { display: none; }
+        #guide-box { background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px; border: 2px dashed var(--border-color); font-size: 16px; color: #1565C0; font-weight: bold; margin-bottom: 15px; }
+        [data-theme="dark"] #guide-box { color: #64B5F6; background: rgba(0,0,0,0.3); }
+        
+        #instruction-display { font-size: 28px; color: var(--display-color); font-weight: bold; margin-bottom: 10px; min-height: 45px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        
+        /* TIMER UI */
+        #timer-container {
+            width: 80%; max-width: 400px; margin: 0 auto 20px auto; background: rgba(255,255,255,0.2); 
+            border-radius: 15px; border: 2px solid var(--border-color); position: relative; height: 28px; overflow: hidden; display: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #timer-bar { height: 100%; background: #4CAF50; width: 100%; transition: width 1s linear, background-color 0.5s; }
+        #timer-text { position: absolute; top: 0; left: 0; right: 0; bottom: 0; line-height: 28px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+        #game-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px; min-height: 250px; padding: 10px 0 20px 0; }
+
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px) rotate(-5deg); } 50% { transform: translateX(8px) rotate(5deg); } 75% { transform: translateX(-8px) rotate(-5deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .ans-btn { background: #fff; border: 3px solid var(--border-color); color: #333; font-size: 22px; font-weight: bold; padding: 10px 20px; border-radius: 15px; cursor: pointer; transition: 0.2s; margin: 5px; box-shadow: 0 4px 0 var(--border-color);}
+        .ans-btn:active { transform: translateY(4px); box-shadow: none; background: var(--border-color); color: white; }
+        
+        .action-btn { background-color: #4CAF50; color: white; border: none; padding: 12px 25px; font-size: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 5px 0 #2E7D32; margin: 10px; }
+        .action-btn:active { transform: translateY(5px); box-shadow: none; }
+        .menu-return-btn { background-color: #E91E63; box-shadow: 0 5px 0 #AD1457; }
+        
+        .math-eq { font-size: 38px; font-weight: bold; color: var(--text-color); margin-bottom: 20px; background: rgba(255,255,255,0.4); padding: 15px 30px; border-radius: 20px; border: 2px dashed var(--display-color);}
+        [data-theme="dark"] .math-eq { background: rgba(0,0,0,0.4); }
+        /* Footer Style */
+        footer {
+            margin: 20px auto 30px auto;
+            text-align: center;
+        }
+        .school-btn {
+            display: inline-block;
+            background-color: #303030;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .school-btn:hover {
+            background-color: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+        }
+
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div id="navbar">
+        <button id="nav-home-btn" class="nav-btn" onclick="showMenu()" style="display:none;" title="Menu">🏠 મેનૂ</button>
+        <div id="nav-title" class="category-title">ધોરણ ૩ (Class 3)</div>
+        <button class="nav-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+    </div>
+
+    <div id="app-container">
+        <!-- Main Title -->
+        <div id="menu-header">
+            <h2>✨ ચાલો જ્ઞાનની દુનિયામાં જઈએ! ✨</h2>
+            <p>
+                ધોરણ ૩ ના બાળકો માટે ખાસ ગણિત, પર્યાવરણ અને ભાષાની રમતો. 🎒<br>
+                ભાગાકાર, સમાનાર્થી-વિરોધી શબ્દો અને અંગ્રેજી હવે એકદમ સરળ. વિચારો અને સમયસર જવાબ આપો!
+            </p>
+            <div class="level-container">
+                <button id="btn-lvl-1" class="level-btn active" onclick="setLevel(1)">સરળ (Easy)</button>
+                <button id="btn-lvl-2" class="level-btn" onclick="setLevel(2)">અઘરું (Hard)</button>
+            </div>
+        </div>
+        
+        <!-- MENU VIEW (16 GAMES FOR CLASS 3) -->
+        <div id="menu-view">
+            <!-- Math -->
+            <div class="menu-card" id="menu-1" onclick="startGame('addition')"><div class="menu-icon">➕</div><div class="menu-title">૧. મોટા સરવાળા</div></div>
+            <div class="menu-card" id="menu-2" onclick="startGame('subtraction')"><div class="menu-icon">➖</div><div class="menu-title">૨. બાદબાકી</div></div>
+            <div class="menu-card" id="menu-3" onclick="startGame('multiplication')"><div class="menu-icon">✖️</div><div class="menu-title">૩. ગુણાકાર</div></div>
+            <div class="menu-card" id="menu-4" onclick="startGame('division')"><div class="menu-icon">➗</div><div class="menu-title">૪. ભાગાકાર</div></div>
+            <div class="menu-card" id="menu-5" onclick="startGame('time')"><div class="menu-icon">⏰</div><div class="menu-title">૫. સમય ઓળખો</div></div>
+            <div class="menu-card" id="menu-6" onclick="startGame('money')"><div class="menu-icon">₹</div><div class="menu-title">૬. આપણું નાણું</div></div>
+            
+            <!-- Gujarati & EVS -->
+            <div class="menu-card" id="menu-7" onclick="startGame('synonyms')"><div class="menu-icon">🔤</div><div class="menu-title">૭. સમાનાર્થી શબ્દો</div></div>
+            <div class="menu-card" id="menu-8" onclick="startGame('antonyms')"><div class="menu-icon">🔄</div><div class="menu-title">૮. વિરોધી શબ્દો</div></div>
+            <div class="menu-card" id="menu-9" onclick="startGame('oneword')"><div class="menu-icon">👨‍🏫</div><div class="menu-title">૯. શબ્દસમૂહ</div></div>
+            <div class="menu-card" id="menu-10" onclick="startGame('guj_gk')"><div class="menu-icon">🗺️</div><div class="menu-title">૧૦. આપણું ગુજરાત</div></div>
+            <div class="menu-card" id="menu-11" onclick="startGame('evs_gk')"><div class="menu-icon">🌈</div><div class="menu-title">૧૧. પર્યાવરણ</div></div>
+            <div class="menu-card" id="menu-12" onclick="startGame('useful_animals')"><div class="menu-icon">🐄</div><div class="menu-title">૧૨. ઉપયોગી પ્રાણીઓ</div></div>
+            
+            <!-- English -->
+            <div class="menu-card" id="menu-13" onclick="startGame('eng_opp')"><div class="menu-icon">⬆️⬇️</div><div class="menu-title">૧૩. Eng Opposites</div></div>
+            <div class="menu-card" id="menu-14" onclick="startGame('eng_plural')"><div class="menu-icon">👦👦</div><div class="menu-title">૧૪. Plurals (બહુવચન)</div></div>
+            <div class="menu-card" id="menu-15" onclick="startGame('eng_words')"><div class="menu-icon">📖</div><div class="menu-title">૧૫. Word Meaning</div></div>
+            <div class="menu-card" id="menu-16" onclick="startGame('skipcount')"><div class="menu-icon">🔢</div><div class="menu-title">૧૬. શ્રેણી પૂર્ણ કરો</div></div>
+        </div>
+
+        <!-- GAME VIEW -->
+        <div id="game-view">
+            <div id="guide-box">Guide Text</div>
+            <div id="instruction-display">Instruction Text</div>
+            
+            <!-- TIMER UI -->
+            <div id="timer-container">
+                <div id="timer-bar"></div>
+                <div id="timer-text">⏳ 20</div>
+            </div>
+
+            <div id="game-area"></div>
+            <div id="controls-area"></div>
+        </div>
+    </div>
+	 <!-- FOOTER -->
+    <footer>
+        <a href="index.html" class="school-btn">🏫 આપણી ડિજિટલ સ્કૂલ</a>
+    </footer>
+
+
+    <script>
+        let isDarkMode = true; 
+        let currentLevel = 1; 
+        let currentGameType = '';
+        
+        const gameArea = document.getElementById('game-area');
+        const instruction = document.getElementById('instruction-display');
+        const controls = document.getElementById('controls-area');
+
+        function toGuj(num) { 
+            const gujDigits = ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'];
+            return num.toString().split('').map(d => gujDigits[parseInt(d)] || d).join(''); 
+        }
+
+        // --- DATA ARRAYS (FOR CLASS 3) ---
+        const synData = [{q:'પાણી', a:'જળ'}, {q:'સૂર્ય', a:'રવિ'}, {q:'આકાશ', a:'આભ'}, {q:'પૃથ્વી', a:'ધરતી'}, {q:'ફૂલ', a:'પુષ્પ'}, {q:'ઝાડ', a:'વૃક્ષ'}, {q:'જંગલ', a:'વન'}, {q:'આંખ', a:'નયન'}, {q:'પવન', a:'વાયુ'}, {q:'પક્ષી', a:'પંખી'}];
+        const antData = [{q:'રાત', a:'દિવસ'}, {q:'આજ', a:'કાલ'}, {q:'નવું', a:'જૂનું'}, {q:'સાચું', a:'ખોટું'}, {q:'ઉપર', a:'નીચે'}, {q:'આગળ', a:'પાછળ'}, {q:'અમીર', a:'ગરીબ'}, {q:'જાડું', a:'પાતળું'}, {q:'નાનું', a:'મોટું'}, {q:'ઠંડુ', a:'ગરમ'}];
+        const oneWordData = [{q:'લાકડાં કાપનાર', a:'સુથાર'}, {q:'લોખંડ ઘડનાર', a:'લુહાર'}, {q:'માટીનાં વાસણ બનાવનાર', a:'કુંભાર'}, {q:'સોનાનાં ઘરેણાં બનાવનાર', a:'સોની'}, {q:'કપડાં સીવનાર', a:'દરજી'}, {q:'દર્દીની સારવાર કરનાર', a:'ડોક્ટર'}, {q:'ખેતી કરનાર', a:'ખેડૂત'}, {q:'દેશની રક્ષા કરનાર', a:'સૈનિક'}, {q:'બાળકોને ભણાવનાર', a:'શિક્ષક'}];
+        const gujGkData = [{q:'ગુજરાતનું પાટનગર', a:'ગાંધીનગર'}, {q:'ગુજરાતનું સૌથી મોટું શહેર', a:'અમદાવાદ'}, {q:'ગુજરાતની સૌથી મોટી નદી', a:'નર્મદા'}, {q:'ગુજરાતનો સૌથી ઊંચો પર્વત', a:'ગિરનાર'}, {q:'ગુજરાતનું રાજ્ય પ્રાણી', a:'સિંહ'}, {q:'ગુજરાતનું રાજ્ય પક્ષી', a:'સુરખાબ'}, {q:'ગુજરાતનું લોકનૃત્ય', a:'ગરબા'}, {q:'આપણી મુખ્ય ભાષા', a:'ગુજરાતી'}];
+        const evsGkData = [{q:'સૂર્ય કઈ દિશામાં ઊગે?', a:'પૂર્વ'}, {q:'સૂર્ય કઈ દિશામાં આથમે?', a:'પશ્ચિમ'}, {q:'ઉત્તરની સામે કઈ દિશા હોય?', a:'દક્ષિણ'}, {q:'પૂર્વની સામે કઈ દિશા હોય?', a:'પશ્ચિમ'}, {q:'કુલ દિશાઓ કેટલી છે?', a:'ચાર'}, {q:'રાત્રે આકાશમાં શું દેખાય?', a:'ચાંદો અને તારા'}, {q:'મેઘધનુષમાં કેટલા રંગો હોય?', a:'સાત'}, {q:'આપણા દેશનું નામ શું છે?', a:'ભારત'}];
+        const animalUsefulData = [{q:'દૂધ કોણ આપે?', a:'ગાય'}, {q:'ઊન કોણ આપે?', a:'ઘેટું'}, {q:'મધ કોણ આપે?', a:'મધમાખી'}, {q:'ઈંડા કોણ આપે?', a:'મરઘી'}, {q:'રણનું વાહન કોણ કહેવાય?', a:'ઊંટ'}, {q:'ભાર કોણ ખેંચે?', a:'ગધેડો'}, {q:'ઘરની ચોકી કોણ કરે?', a:'કૂતરો'}, {q:'સવારી માટે કોનો ઉપયોગ થાય?', a:'ઘોડો'}];
+        const timeData = [{q:'૧ કલાક એટલે કેટલી મિનિટ?', a:'૬૦ મિનિટ'}, {q:'૧ મિનિટ એટલે કેટલી સેકન્ડ?', a:'૬૦ સેકન્ડ'}, {q:'૧ દિવસના કલાક કેટલા?', a:'૨૪ કલાક'}, {q:'૧ અઠવાડિયાના દિવસો કેટલા?', a:'૭ દિવસ'}, {q:'૧ મહિનાના અંદાજે દિવસો?', a:'૩૦ દિવસ'}, {q:'૧ વર્ષના મહિના કેટલા?', a:'૧૨ મહિના'}, {q:'૧ વર્ષના દિવસો કેટલા?', a:'૩૬૫ દિવસ'}, {q:'અડધો કલાક એટલે કેટલી મિનિટ?', a:'૩૦ મિનિટ'}];
+        const moneyData = [{q:'૧ રૂપિયો એટલે કેટલા પૈસા?', a:'૧૦૦ પૈસા'}, {q:'૫૦ પૈસા + ૫૦ પૈસા = ?', a:'૧ રૂપિયો'}, {q:'૧૦ રૂપિયા + ૧૦ રૂપિયા = ?', a:'૨૦ રૂપિયા'}, {q:'૧૦૦ + ૧૦૦ = ?', a:'૨૦૦ રૂપિયા'}, {q:'૫૦૦ + ૫૦૦ = ?', a:'૧૦૦૦ રૂપિયા'}, {q:'૨૦ રૂપિયાની નોટનો રંગ?', a:'લીલો (Greenish)'}, {q:'૫૦ રૂપિયાની નોટનો રંગ?', a:'ભૂરો (Blueish)'}, {q:'સિક્કા શેમાંથી બને?', a:'ધાતુમાંથી'}];
+        
+        const engOppData = [{q:'Good', a:'Bad'}, {q:'Hot', a:'Cold'}, {q:'Up', a:'Down'}, {q:'Left', a:'Right'}, {q:'Big', a:'Small'}, {q:'Tall', a:'Short'}, {q:'Fast', a:'Slow'}, {q:'Happy', a:'Sad'}, {q:'Day', a:'Night'}, {q:'Open', a:'Close'}];
+        const engPluralData = [{q:'Boy', a:'Boys'}, {q:'Girl', a:'Girls'}, {q:'Child', a:'Children'}, {q:'Man', a:'Men'}, {q:'Woman', a:'Women'}, {q:'Tooth', a:'Teeth'}, {q:'Mouse', a:'Mice'}, {q:'Foot', a:'Feet'}, {q:'Box', a:'Boxes'}, {q:'Leaf', a:'Leaves'}];
+        const engWordData = [{q:'Book એટલે શું?', a:'ચોપડી'}, {q:'Sun એટલે શું?', a:'સૂર્ય'}, {q:'Water એટલે શું?', a:'પાણી'}, {q:'Fire એટલે શું?', a:'આગ'}, {q:'Earth એટલે શું?', a:'પૃથ્વી'}, {q:'Sky એટલે શું?', a:'આકાશ'}, {q:'Star એટલે શું?', a:'તારો'}, {q:'Bird એટલે શું?', a:'પક્ષી'}, {q:'Animal એટલે શું?', a:'પ્રાણી'}, {q:'Friend એટલે શું?', a:'મિત્ર'}];
+        
+        const winMessages = ["ખૂબ સરસ! 👏", "અદ્ભુત! 🌟", "વાહ! કમાલ કરી દીધી! 🎉", "શાબાશ! 🏅", "એકદમ સાચો જવાબ! 🧠"];
+
+        function getOptCount() { return currentLevel === 1 ? 5 : 8; } 
+
+        // --- AUDIO ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playPopSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); 
+            gain.gain.setValueAtTime(1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+        function playErrorSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15); 
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // --- TIMER ---
+        let timerInterval;
+        function startTimer() {
+            let tc = document.getElementById('timer-container');
+            tc.style.display = 'block';
+            // Increased time for Class 3 as reading takes longer
+            let duration = currentLevel === 1 ? 20 : 12; 
+            let timeLeft = duration;
+            document.getElementById('timer-bar').style.width = '100%';
+            document.getElementById('timer-bar').style.backgroundColor = '#4CAF50';
+            document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+                let pct = (timeLeft / duration) * 100;
+                document.getElementById('timer-bar').style.width = pct + '%';
+                if(pct <= 30) document.getElementById('timer-bar').style.backgroundColor = '#F44336';
+                else if(pct <= 60) document.getElementById('timer-bar').style.backgroundColor = '#FF9800';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    playErrorSound();
+                    instruction.style.color = 'red';
+                    instruction.innerHTML = "સમય પૂરો! (Time's Up!) ⏰";
+                    tc.style.display = 'none'; 
+                    document.querySelectorAll('.ans-btn').forEach(btn => { btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6';});
+                }
+            }, 1000);
+        }
+
+        function hideTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('timer-container').style.display = 'none';
+        }
+
+        // --- NAVIGATION ---
+        function toggleTheme() { isDarkMode = !isDarkMode; document.body.setAttribute('data-theme', isDarkMode ? 'dark' : ''); }
+        function showMenu() {
+            hideTimer();
+            document.getElementById('menu-view').style.display = 'grid';
+            document.getElementById('menu-header').style.display = 'block';
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('nav-home-btn').style.display = 'none';
+            document.getElementById('nav-title').innerText = 'ધોરણ ૩ (Class 3)';
+        }
+        function setLevel(lvl) {
+            currentLevel = lvl;
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-lvl-${lvl}`).classList.add('active');
+        }
+        function showGameUI(title, guideText) {
+            hideTimer();
+            document.getElementById('menu-view').style.display = 'none';
+            document.getElementById('menu-header').style.display = 'none';
+            document.getElementById('game-view').style.display = 'block';
+            document.getElementById('nav-home-btn').style.display = 'inline-block';
+            document.getElementById('nav-title').innerText = title + (currentLevel === 1 ? ' (સરળ)' : ' (અઘરું)');
+            document.getElementById('guide-box').innerText = guideText;
+            gameArea.innerHTML = ''; controls.innerHTML = '';
+        }
+        function setGameControls(restartFunc) {
+            controls.innerHTML = `<button class="action-btn" onclick="${restartFunc}">ફરી રમો 🔄</button> <button class="action-btn menu-return-btn" onclick="showMenu()">મેનૂમાં પાછા 🏠</button>`;
+        }
+        function showWinState() {
+            hideTimer(); instruction.innerHTML = ""; 
+            let randomMsg = winMessages[Math.floor(Math.random() * winMessages.length)];
+            gameArea.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; animation: float 2s infinite;"><div style="font-size: 80px; margin-bottom: 10px;">🏆</div><h2 style="color:var(--display-color); font-size: 36px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${randomMsg}</h2></div>`;
+        }
+
+        // --- MAIN STARTER ---
+        function startGame(type) {
+            currentGameType = type;
+            if (type === 'addition') initMathGame('add');
+            if (type === 'subtraction') initMathGame('sub');
+            if (type === 'multiplication') initMulGame();
+            if (type === 'division') initDivGame();
+            if (type === 'time') playQARound('૫. સમય ઓળખો', 'સાચો સમય કે જવાબ પસંદ કરો!', timeData);
+            if (type === 'money') playQARound('૬. આપણું નાણું', 'રૂપિયા-પૈસાની ગણતરી કરો!', moneyData);
+            
+            // Text based QA
+            if (type === 'synonyms') playQARound('૭. સમાનાર્થી શબ્દો', 'આપેલા શબ્દનો સમાન અર્થવાળો શબ્દ શોધો!', synData);
+            if (type === 'antonyms') playQARound('૮. વિરોધી શબ્દો', 'આપેલા શબ્દનો વિરોધી શબ્દ પસંદ કરો!', antData);
+            if (type === 'oneword') playQARound('૯. શબ્દસમૂહ', 'વાક્ય માટે એક શબ્દ શોધો!', oneWordData);
+            if (type === 'guj_gk') playQARound('૧૦. આપણું ગુજરાત', 'ગુજરાત વિશે સાચો જવાબ આપો!', gujGkData);
+            if (type === 'evs_gk') playQARound('૧૧. પર્યાવરણ', 'પ્રશ્ન વાંચી સાચો જવાબ પસંદ કરો!', evsGkData);
+            if (type === 'useful_animals') playQARound('૧૨. ઉપયોગી પ્રાણીઓ', 'આપણી મદદ કરનાર પ્રાણી ઓળખો!', animalUsefulData);
+            
+            // English
+            if (type === 'eng_opp') playQARound('૧૩. Eng Opposites', 'અંગ્રેજીમાં વિરોધી શબ્દ શોધો!', engOppData);
+            if (type === 'eng_plural') playQARound('૧૪. Plurals', 'આપેલા શબ્દનું બહુવચન શું થશે?', engPluralData);
+            if (type === 'eng_words') playQARound('૧૫. Word Meaning', 'અંગ્રેજી શબ્દનો ગુજરાતી અર્થ શોધો!', engWordData);
+            
+            if (type === 'skipcount') initSkipCountGame();
+        }
+
+        // ==========================================
+        // DYNAMIC GAMES LOGIC
+        // ==========================================
+        
+        // 1 & 2: Addition and Subtraction (2/3-digit)
+        function initMathGame(op) {
+            let isAdd = op === 'add';
+            showGameUI(isAdd ? '૧. મોટા સરવાળા (+)' : '૨. બાદબાકી (-)', 'ગણતરી કરો અને સાચો જવાબ પસંદ કરો!'); 
+            setGameControls(`startGame('${currentGameType}')`);
+            
+            let minNum = currentLevel === 1 ? 50 : 100;
+            let maxNum = currentLevel === 1 ? 200 : 500;
+            let num1 = Math.floor(Math.random() * (maxNum - minNum)) + minNum;
+            let num2 = Math.floor(Math.random() * (isAdd ? (maxNum - 50) : num1 - 20)) + 20; 
+            
+            let ans = isAdd ? (num1 + num2) : (num1 - num2);
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `જવાબ આપો!`;
+            gameArea.innerHTML = `<div class="math-eq">${toGuj(num1)} ${isAdd ? '+' : '-'} ${toGuj(num2)} = ?</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = ans + (Math.floor(Math.random() * 40) - 20); 
+                if(r > 0 && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 3: Multiplication
+        function initMulGame() {
+            showGameUI('૩. ગુણાકાર (ઘડિયા)', 'ઘડિયા બોલો અને જવાબ આપો!'); 
+            setGameControls("startGame('multiplication')");
+            
+            let tableMax = currentLevel === 1 ? 10 : 15;
+            let num1 = Math.floor(Math.random() * tableMax) + 1;
+            let num2 = Math.floor(Math.random() * 10) + 1;
+            
+            let ans = num1 * num2;
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `જવાબ આપો!`;
+            gameArea.innerHTML = `<div class="math-eq">${toGuj(num1)} x ${toGuj(num2)} = ?</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = num1 * (Math.floor(Math.random() * 10) + 1); 
+                if(r !== ans && !options.includes(r)) options.push(r); 
+                else if(options.length < getOptCount()){
+                   let altR = ans + (Math.floor(Math.random() * 10) - 5);
+                   if(altR > 0 && !options.includes(altR)) options.push(altR);
+                }
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 4: Division
+        function initDivGame() {
+            showGameUI('૪. ભાગાકાર', 'સાચો ભાગાકાર કરો!'); 
+            setGameControls("startGame('division')");
+            
+            let maxDivisor = currentLevel === 1 ? 10 : 15;
+            let ans = Math.floor(Math.random() * 10) + 1; // The quotient
+            let divisor = Math.floor(Math.random() * maxDivisor) + 1;
+            let dividend = ans * divisor; // Ensures perfect division
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `જવાબ આપો!`;
+            gameArea.innerHTML = `<div class="math-eq">${toGuj(dividend)} ÷ ${toGuj(divisor)} = ?</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = ans + (Math.floor(Math.random() * 10) - 5); 
+                if(r > 0 && r !== ans && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 16: Skip Counting / Number Series
+        function initSkipCountGame() {
+            showGameUI('૧૬. શ્રેણી પૂર્ણ કરો', 'પેટર્ન સમજીને આગળની સંખ્યા પસંદ કરો!'); setGameControls("startGame('skipcount')");
+            let steps = currentLevel === 1 ? [5, 10, 20] : [3, 4, 15, 25];
+            let step = steps[Math.floor(Math.random() * steps.length)];
+            let start = Math.floor(Math.random() * 10) * step + step;
+            
+            let seqDisplay = `${toGuj(start)} , ${toGuj(start + step)} , ${toGuj(start + (step*2))} , ❓`;
+            let ans = start + (step * 3);
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `કઈ સંખ્યા આવશે?`;
+            gameArea.innerHTML = `<div class="math-eq" style="letter-spacing: 5px;">${seqDisplay}</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = ans + (Math.floor(Math.random() * 5) - 2) * step; 
+                if(r > 0 && r !== ans && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // Generic QA function (For Vocabulary, Opposites, English, etc.)
+        function playQARound(title, guide, dataset) {
+            showGameUI(title, guide); 
+            setGameControls(`startGame('${currentGameType}')`);
+            
+            let targetIdx = Math.floor(Math.random() * dataset.length);
+            let targetItem = dataset[targetIdx];
+
+            instruction.style.color = 'var(--display-color)'; 
+            instruction.innerHTML = 'સાચો જવાબ પસંદ કરો!';
+            
+            gameArea.innerHTML = `<div class="math-eq">${targetItem.q}</div>`;
+            
+            let optsCount = getOptCount(); 
+            let options = [targetItem.a];
+            let pool = [...dataset].filter(i => i.a !== targetItem.a).map(i => i.a).sort(() => 0.5 - Math.random());
+            
+            // Fill remaining options safely
+            let maxToAdd = Math.min(optsCount - 1, pool.length);
+            for(let i=0; i<maxToAdd; i++) options.push(pool[i]);
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach((optText) => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = optText;
+                btn.onclick = function() {
+                    hideTimer();
+                    if (optText === targetItem.a) { playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; }
+                }; bc.appendChild(btn);
+            });
+            gameArea.appendChild(bc);
+            startTimer(); 
+        }
+
+    </script>
+</body>
+</html>
