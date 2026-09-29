@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 1 Learning Hub (ધોરણ 1)</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-color: #E0F7FA; --text-color: #333333;
+            --nav-bg: #FF9800; --nav-text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --border-color: #4CAF50; --display-color: #E91E63;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e; --text-color: #e0e0e0;
+            --nav-bg: #e94560; --nav-text: #ffffff;
+            --card-bg: rgba(22, 33, 62, 0.8);
+            --border-color: #0f3460; --display-color: #ffb400;
+        }
+
+        body {
+            margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color);
+            font-family: 'Comic Sans MS', sans-serif; text-align: center; transition: 0.4s; overflow-x: hidden; touch-action: manipulation;
+        }
+
+        /* Top Navigation */
+        #navbar {
+            background-color: var(--nav-bg); color: var(--nav-text); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2); border: 2px solid #fff; color: #fff; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 22px; transition: 0.2s;
+        }
+        .nav-btn:hover { background: #fff; color: var(--nav-bg); }
+        .category-title { font-size: 24px; font-weight: bold; }
+
+        /* Main App Container */
+        #app-container {
+            width: 95vw; max-width: 950px; margin: 15px auto; background: var(--card-bg);
+            border-radius: 25px; border: 3px solid var(--border-color); padding: 25px 15px; box-sizing: border-box; min-height: 65vh;
+        }
+
+        /* --- Menu Header & Paragraph --- */
+        #menu-header { margin-bottom: 25px; padding: 0 10px; }
+        #menu-header h2 { font-size: 26px; font-weight: bold; color: var(--display-color); margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        #menu-header p { font-size: 16px; color: var(--text-color); line-height: 1.6; max-width: 750px; margin: 0 auto; font-weight: 500; margin-bottom: 20px;}
+        
+        /* Level Selector */
+        .level-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
+        .level-btn {
+            background: rgba(255,255,255,0.5); border: 3px solid #ccc; padding: 10px 30px; font-size: 18px; font-weight: bold;
+            border-radius: 15px; cursor: pointer; transition: 0.3s; color: var(--text-color);
+        }
+        .level-btn.active { border-color: #4CAF50; background: #4CAF50; color: white; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4); transform: scale(1.05);}
+        [data-theme="dark"] .level-btn.active { background: #E91E63; border-color: #E91E63; box-shadow: 0 4px 10px rgba(233, 30, 99, 0.4); }
+
+        /* --- Menu View (Grid Layout) --- */
+        #menu-view { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; padding: 5px; }
+        .menu-card {
+            width: 100%; aspect-ratio: 1; background: #fff; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: none; border-bottom: 8px solid transparent; transition: 0.3s; color: #333; padding: 10px; box-sizing: border-box;
+        }
+        .menu-card:hover { transform: translateY(-6px); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
+        .menu-icon { font-size: 42px; margin-bottom: 5px; }
+        .menu-title { font-size: 14px; font-weight: bold; text-align: center; line-height: 1.2; word-wrap: break-word; }
+        
+        /* Menu Colors */
+        #menu-1 { border-bottom-color: #F44336; } #menu-2 { border-bottom-color: #9C27B0; }
+        #menu-3 { border-bottom-color: #03A9F4; } #menu-4 { border-bottom-color: #4CAF50; }
+        #menu-5 { border-bottom-color: #FF9800; } #menu-6 { border-bottom-color: #795548; }
+        #menu-7 { border-bottom-color: #E91E63; } #menu-8 { border-bottom-color: #607D8B; }
+        #menu-9 { border-bottom-color: #8E24AA; } #menu-10 { border-bottom-color: #D32F2F; }
+        #menu-11 { border-bottom-color: #00897B; } #menu-12 { border-bottom-color: #FBC02D; }
+        #menu-13 { border-bottom-color: #8D6E63; } #menu-14 { border-bottom-color: #00BCD4; }
+        #menu-15 { border-bottom-color: #5C6BC0; } #menu-16 { border-bottom-color: #FF5722; }
+
+        @media (max-width: 600px) {
+            #menu-view { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .menu-icon { font-size: 38px; } .menu-title { font-size: 13px; }
+            .category-title { font-size: 18px; } .nav-btn { font-size: 18px; padding: 5px 10px; }
+            #menu-header h2 { font-size: 20px; } #menu-header p { font-size: 14px; }
+            #app-container { padding: 15px 10px; margin: 10px; }
+            .level-btn { font-size: 15px; padding: 8px 20px;}
+        }
+        
+        @media (min-width: 1000px) {
+            #menu-view { grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 800px; margin: 0 auto; }
+            .menu-icon { font-size: 48px; } .menu-title { font-size: 16px; }
+            #app-container { padding: 35px; }
+        }
+
+        /* --- Game View --- */
+        #game-view { display: none; }
+        #guide-box { background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px; border: 2px dashed var(--border-color); font-size: 16px; color: #1565C0; font-weight: bold; margin-bottom: 15px; }
+        [data-theme="dark"] #guide-box { color: #64B5F6; background: rgba(0,0,0,0.3); }
+        
+        #instruction-display { font-size: 30px; color: var(--display-color); font-weight: bold; margin-bottom: 10px; min-height: 45px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        
+        /* TIMER UI */
+        #timer-container {
+            width: 80%; max-width: 400px; margin: 0 auto 20px auto; background: rgba(255,255,255,0.2); 
+            border-radius: 15px; border: 2px solid var(--border-color);
+            position: relative; height: 28px; overflow: hidden; display: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #timer-bar { height: 100%; background: #4CAF50; width: 100%; transition: width 1s linear, background-color 0.5s; }
+        #timer-text { position: absolute; top: 0; left: 0; right: 0; bottom: 0; line-height: 28px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+        #game-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 20px; min-height: 250px; padding: 10px 0 20px 0; }
+
+        /* Shared Game Elements */
+        .popped { transform: scale(0) !important; opacity: 0; pointer-events: none; }
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px) rotate(-5deg); } 50% { transform: translateX(8px) rotate(5deg); } 75% { transform: translateX(-8px) rotate(-5deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .game-obj { font-size: 60px; cursor: pointer; transition: 0.2s; filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.2)); margin: 5px; }
+        .game-obj:hover { transform: scale(1.1); }
+        
+        .ans-btn { background: #fff; border: 3px solid var(--border-color); color: #333; font-size: 26px; font-weight: bold; padding: 10px 25px; border-radius: 15px; cursor: pointer; transition: 0.2s; margin: 5px; box-shadow: 0 4px 0 var(--border-color);}
+        .ans-btn:active { transform: translateY(4px); box-shadow: none; background: var(--border-color); color: white; }
+        
+        .action-btn { background-color: #4CAF50; color: white; border: none; padding: 12px 25px; font-size: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 5px 0 #2E7D32; margin: 10px; }
+        .action-btn:active { transform: translateY(5px); box-shadow: none; }
+        .menu-return-btn { background-color: #E91E63; box-shadow: 0 5px 0 #AD1457; }
+        
+        /* Math Equation Styling */
+        .math-eq { font-size: 45px; font-weight: bold; color: var(--text-color); margin-bottom: 20px; background: rgba(255,255,255,0.4); padding: 10px 30px; border-radius: 20px; border: 2px dashed var(--display-color);}
+        [data-theme="dark"] .math-eq { background: rgba(0,0,0,0.4); }
+    /* Footer Style */
+        footer {
+            margin: 20px auto 30px auto;
+            text-align: center;
+        }
+        .school-btn {
+            display: inline-block;
+            background-color: #303030;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .school-btn:hover {
+            background-color: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+        }
+	</style>
+</head>
+<body data-theme="dark">
+
+    <div id="navbar">
+        <button id="nav-home-btn" class="nav-btn" onclick="showMenu()" style="display:none;" title="Menu">🏠 મેનૂ</button>
+        <div id="nav-title" class="category-title">ધોરણ ૧ (Class 1)</div>
+        <button class="nav-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+    </div>
+
+    <div id="app-container">
+        <!-- Main Title / Welcome Paragraph & Level Selector -->
+        <div id="menu-header">
+            <h2>✨ ચાલો ગમ્મત સાથે ગણિત અને ગુજરાતી શીખીએ! ✨</h2>
+            <p>
+                ધોરણ ૧ ના અભ્યાસક્રમ (ગણિત ગમ્મત અને કલરવ) મુજબ તૈયાર કરેલી ખાસ રમતો. 🎒<br>
+                સરવાળા, બાદબાકી, ગુજરાતી શબ્દો, અને અંગ્રેજી આલ્ફાબેટ હવે રમતા રમતા શીખો. ટાઈમર પૂરું થાય તે પહેલાં જવાબ આપો!
+            </p>
+            <div class="level-container">
+                <button id="btn-lvl-1" class="level-btn active" onclick="setLevel(1)">સરળ (Easy)</button>
+                <button id="btn-lvl-2" class="level-btn" onclick="setLevel(2)">અઘરું (Hard)</button>
+            </div>
+        </div>
+        
+        <!-- MENU VIEW (16 GAMES FOR CLASS 1) -->
+        <div id="menu-view">
+            <!-- Math -->
+            <div class="menu-card" id="menu-1" onclick="startGame('addition')"><div class="menu-icon">➕</div><div class="menu-title">૧. સરવાળા</div></div>
+            <div class="menu-card" id="menu-2" onclick="startGame('subtraction')"><div class="menu-icon">➖</div><div class="menu-title">૨. બાદબાકી</div></div>
+            <div class="menu-card" id="menu-3" onclick="startGame('after')"><div class="menu-icon">➡️</div><div class="menu-title">૩. પછીની સંખ્યા</div></div>
+            <div class="menu-card" id="menu-4" onclick="startGame('before')"><div class="menu-icon">⬅️</div><div class="menu-title">૪. પહેલાની સંખ્યા</div></div>
+            <div class="menu-card" id="menu-5" onclick="startGame('compare')"><div class="menu-icon">⚖️</div><div class="menu-title">૫. નાની-મોટી સંખ્યા</div></div>
+            <div class="menu-card" id="menu-6" onclick="startGame('pattern')"><div class="menu-icon">🔴🔵</div><div class="menu-title">૬. પેટર્ન</div></div>
+            
+            <!-- Gujarati -->
+            <div class="menu-card" id="menu-7" onclick="startGame('guj_words')"><div class="menu-icon">અઆ</div><div class="menu-title">૭. ચિત્ર પરથી શબ્દ</div></div>
+            <div class="menu-card" id="menu-8" onclick="startGame('missing_letter')"><div class="menu-icon">ક_ળ</div><div class="menu-title">૮. ખૂટતો અક્ષર</div></div>
+            <div class="menu-card" id="menu-9" onclick="startGame('days')"><div class="menu-icon">📅</div><div class="menu-title">૯. વારના નામ</div></div>
+            <div class="menu-card" id="menu-10" onclick="startGame('months')"><div class="menu-icon">📆</div><div class="menu-title">૧૦. મહિનાના નામ</div></div>
+            
+            <!-- English / EVS -->
+            <div class="menu-card" id="menu-11" onclick="startGame('eng_letters')"><div class="menu-icon">Aa</div><div class="menu-title">૧૧. Capital - Small</div></div>
+            <div class="menu-card" id="menu-12" onclick="startGame('eng_words')"><div class="menu-icon">ABC</div><div class="menu-title">૧૨. English Words</div></div>
+            <div class="menu-card" id="menu-13" onclick="startGame('body_parts')"><div class="menu-icon">👁️👂</div><div class="menu-title">૧૩. શરીરના અંગો</div></div>
+            <div class="menu-card" id="menu-14" onclick="startGame('animals')"><div class="menu-icon">🦁</div><div class="menu-title">૧૪. પ્રાણીઓ</div></div>
+            <div class="menu-card" id="menu-15" onclick="startGame('vehicles')"><div class="menu-icon">🚗</div><div class="menu-title">૧૫. વાહનો</div></div>
+            <div class="menu-card" id="menu-16" onclick="startGame('seasons')"><div class="menu-icon">☔☀️</div><div class="menu-title">૧૬. ઋતુઓ</div></div>
+        </div>
+
+        <!-- GAME VIEW -->
+        <div id="game-view">
+            <div id="guide-box">Guide Text</div>
+            <div id="instruction-display">Instruction Text</div>
+            
+            <!-- TIMER UI -->
+            <div id="timer-container">
+                <div id="timer-bar"></div>
+                <div id="timer-text">⏳ 15</div>
+            </div>
+
+            <div id="game-area"></div>
+            <div id="controls-area"></div>
+        </div>
+    </div>
+	 <!-- FOOTER -->
+    <footer>
+        <a href="index.html" class="school-btn">🏫 આપણી ડિજિટલ સ્કૂલ</a>
+    </footer>
+
+    <script>
+        // --- GLOBAL VARIABLES ---
+        let isDarkMode = true; 
+        let currentLevel = 1; // 1 = Easy, 2 = Hard
+        
+        const gameArea = document.getElementById('game-area');
+        const instruction = document.getElementById('instruction-display');
+        const controls = document.getElementById('controls-area');
+
+        // Gujarati Numbers Converter
+        const gujDigits = ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'];
+        function toGuj(num) { return num.toString().split('').map(d => gujDigits[parseInt(d)]).join(''); }
+
+        // Data Arrays for Class 1 Content
+        const gujWordsData = [
+            {n:'કમળ', e:'🪷'}, {n:'ઝાડ', e:'🌳'}, {n:'ઘર', e:'🏠'}, {n:'સફરજન', e:'🍎'}, {n:'બતક', e:'🦆'}, 
+            {n:'માછલી', e:'🐟'}, {n:'સૂરજ', e:'☀️'}, {n:'ચાંદો', e:'🌙'}, {n:'તારો', e:'⭐'}, {n:'ફૂલ', e:'🌻'}, {n:'પતંગિયું', e:'🦋'}
+        ];
+        const engWordsData = [
+            {n:'Cat (બિલાડી)', e:'🐈'}, {n:'Dog (કૂતરો)', e:'🐕'}, {n:'Sun (સૂરજ)', e:'☀️'}, {n:'Car (કાર)', e:'🚗'}, 
+            {n:'Apple (સફરજન)', e:'🍎'}, {n:'Ball (દડો)', e:'⚽'}, {n:'Book (ચોપડી)', e:'📖'}, {n:'Tree (ઝાડ)', e:'🌳'}
+        ];
+        const bodyPartsData = [
+            {n:'આંખ (Eye)', e:'👁️'}, {n:'કાન (Ear)', e:'👂'}, {n:'નાક (Nose)', e:'👃'}, {n:'હાથ (Hand)', e:'✋'}, 
+            {n:'પગ (Leg)', e:'🦵'}, {n:'દાંત (Teeth)', e:'🦷'}, {n:'જીભ (Tongue)', e:'👅'}
+        ];
+        const animalsData = [{n:'ગાય',e:'🐮'}, {n:'કૂતરો',e:'🐶'}, {n:'બિલાડી',e:'🐱'}, {n:'હાથી',e:'🐘'}, {n:'વાંદરો',e:'🐵'}, {n:'સિંહ',e:'🦁'}, {n:'વાઘ',e:'🐯'}, {n:'જીરાફ',e:'🦓'}];
+        const vehiclesData = [{n:'કાર',e:'🚗'}, {n:'ટ્રેન',e:'🚂'}, {n:'વિમાન',e:'✈️'}, {n:'બસ',e:'🚌'}, {n:'સાયકલ',e:'🚲'}, {n:'હેલિકોપ્ટર',e:'🚁'}, {n:'ટ્રક',e:'🚛'}];
+        const seasonsData = [
+            {n:'શિયાળો (ઠંડી)', e:'❄️'}, {n:'ઉનાળો (ગરમી)', e:'☀️'}, {n:'ચોમાસું (વરસાદ)', e:'☔'}, {n:'વસંત (ફૂલો)', e:'🌸'}
+        ];
+        const daysData = [{n:'સોમવાર',e:'૧'}, {n:'મંગળવાર',e:'૨'}, {n:'બુધવાર',e:'૩'}, {n:'ગુરુવાર',e:'૪'}, {n:'શુક્રવાર',e:'૫'}, {n:'શનિવાર',e:'૬'}, {n:'રવિવાર',e:'૭'}];
+        const monthsData = [{n:'જાન્યુઆરી',e:'૧'}, {n:'ફેબ્રુઆરી',e:'૨'}, {n:'માર્ચ',e:'૩'}, {n:'એપ્રિલ',e:'૪'}, {n:'મે',e:'૫'}, {n:'જૂન',e:'૬'}];
+        
+        const winMessages = ["ખૂબ સરસ! 👏", "અદ્ભુત! 🌟", "વાહ! કમાલ કરી દીધી! 🎉", "શાબાશ! 🏅", "સાચો જવાબ! 🧠"];
+
+        // Options Count Logic (5 for Easy, 8 for Hard)
+        function getOptCount() { return currentLevel === 1 ? 5 : 8; } 
+
+        // --- AUDIO ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playPopSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); 
+            gain.gain.setValueAtTime(1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+        function playErrorSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15); 
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // --- TIMER LOGIC ---
+        let timerInterval;
+        function startTimer() {
+            let tc = document.getElementById('timer-container');
+            tc.style.display = 'block';
+            let duration = currentLevel === 1 ? 15 : 8; // 15s Easy, 8s Hard
+            let timeLeft = duration;
+            document.getElementById('timer-bar').style.width = '100%';
+            document.getElementById('timer-bar').style.backgroundColor = '#4CAF50';
+            document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+                let pct = (timeLeft / duration) * 100;
+                document.getElementById('timer-bar').style.width = pct + '%';
+                if(pct <= 30) document.getElementById('timer-bar').style.backgroundColor = '#F44336';
+                else if(pct <= 60) document.getElementById('timer-bar').style.backgroundColor = '#FF9800';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    playErrorSound();
+                    instruction.style.color = 'red';
+                    instruction.innerHTML = "સમય પૂરો! (Time's Up!) ⏰";
+                    tc.style.display = 'none'; 
+                    // Disable clicks
+                    document.querySelectorAll('.ans-btn, .game-obj').forEach(btn => { btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6';});
+                }
+            }, 1000);
+        }
+
+        function hideTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('timer-container').style.display = 'none';
+        }
+
+        // --- NAVIGATION ---
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : '');
+        }
+
+        function showMenu() {
+            hideTimer();
+            document.getElementById('menu-view').style.display = 'grid';
+            document.getElementById('menu-header').style.display = 'block';
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('nav-home-btn').style.display = 'none';
+            document.getElementById('nav-title').innerText = 'ધોરણ ૧ (Class 1)';
+        }
+
+        function setLevel(lvl) {
+            currentLevel = lvl;
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-lvl-${lvl}`).classList.add('active');
+        }
+
+        function showGameUI(title, guideText) {
+            hideTimer();
+            document.getElementById('menu-view').style.display = 'none';
+            document.getElementById('menu-header').style.display = 'none';
+            document.getElementById('game-view').style.display = 'block';
+            document.getElementById('nav-home-btn').style.display = 'inline-block';
+            document.getElementById('nav-title').innerText = title + (currentLevel === 1 ? ' (સરળ)' : ' (અઘરું)');
+            document.getElementById('guide-box').innerText = guideText;
+            gameArea.innerHTML = ''; controls.innerHTML = '';
+        }
+
+        function setGameControls(restartFunc) {
+            controls.innerHTML = `<button class="action-btn" onclick="${restartFunc}">ફરી રમો 🔄</button> <button class="action-btn menu-return-btn" onclick="showMenu()">મેનૂમાં પાછા 🏠</button>`;
+        }
+
+        function showWinState() {
+            hideTimer();
+            instruction.innerHTML = ""; 
+            let randomMsg = winMessages[Math.floor(Math.random() * winMessages.length)];
+            gameArea.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; animation: float 2s infinite;"><div style="font-size: 80px; margin-bottom: 10px;">🏆</div><h2 style="color:var(--display-color); font-size: 36px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${randomMsg}</h2></div>`;
+        }
+
+        function startGame(type) {
+            if (type === 'addition') initMathGame('add');
+            if (type === 'subtraction') initMathGame('sub');
+            if (type === 'after') initSequenceGame('after');
+            if (type === 'before') initSequenceGame('before');
+            if (type === 'compare') initCompareGame();
+            if (type === 'pattern') initPatternGame();
+            
+            if (type === 'guj_words') playGenericRound('૭. શબ્દ ઓળખો', 'ચિત્ર જોઈને સાચો શબ્દ પસંદ કરો!', gujWordsData, 'n', 'e', true);
+            if (type === 'missing_letter') initMissingLetterGame();
+            if (type === 'days') playGenericRound('૯. વારના નામ', 'આપેલા વાર પછી કયો વાર આવે?', daysData, 'n', 'e', false, true);
+            if (type === 'months') playGenericRound('૧૦. મહિનાના નામ', 'આપેલા મહિના પછી કયો મહિનો આવે?', monthsData, 'n', 'e', false, true);
+            
+            if (type === 'eng_letters') initEngLettersGame();
+            if (type === 'eng_words') playGenericRound('૧૨. English Words', 'અંગ્રેજી શબ્દ માટે સાચું ચિત્ર પસંદ કરો!', engWordsData, 'n', 'e', true);
+            if (type === 'body_parts') playGenericRound('૧૩. શરીરના અંગો', 'અંગનું નામ વાંચીને સાચું ચિત્ર પસંદ કરો!', bodyPartsData, 'n', 'e', true);
+            if (type === 'animals') playGenericRound('૧૪. પ્રાણીઓ', 'સાચું પ્રાણી શોધો!', animalsData, 'n', 'e', true);
+            if (type === 'vehicles') playGenericRound('૧૫. વાહનો', 'સાચું વાહન શોધો!', vehiclesData, 'n', 'e', true);
+            if (type === 'seasons') playGenericRound('૧૬. ઋતુઓ', 'ઋતુ પ્રમાણે સાચું ચિત્ર શોધો!', seasonsData, 'n', 'e', true);
+        }
+
+        // ==========================================
+        // DYNAMIC GAMES LOGIC
+        // ==========================================
+        
+        // 1 & 2: Addition and Subtraction
+        function initMathGame(op) {
+            let isAdd = op === 'add';
+            showGameUI(isAdd ? '૧. સરવાળા (+)' : '૨. બાદબાકી (-)', 'સાચો જવાબ પસંદ કરો!'); 
+            setGameControls(isAdd ? "startGame('addition')" : "startGame('subtraction')");
+            
+            let maxNum = currentLevel === 1 ? 9 : 20;
+            let num1 = Math.floor(Math.random() * maxNum) + 1;
+            let num2 = Math.floor(Math.random() * (isAdd ? (maxNum - num1 + 1) : num1)) + (isAdd ? 1 : 0);
+            if(!isAdd && num1 === num2) num1++; // avoid 0 answer for now
+            
+            let ans = isAdd ? (num1 + num2) : (num1 - num2);
+            instruction.style.color = 'var(--display-color)'; 
+            instruction.innerHTML = `જવાબ આપો!`;
+            gameArea.innerHTML = `<div class="math-eq">${toGuj(num1)} ${isAdd ? '+' : '-'} ${toGuj(num2)} = ?</div>`;
+            
+            let options = [ans];
+            let maxOptRange = currentLevel === 1 ? 15 : 30;
+            while(options.length < getOptCount()) { 
+                let r = Math.floor(Math.random() * maxOptRange) + 1; 
+                if(!options.includes(r) && r !== ans) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            bc.style.width = '100%';
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                };
+                bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 3 & 4: Before / After Number
+        function initSequenceGame(type) {
+            let isAfter = type === 'after';
+            showGameUI(isAfter ? '૩. પછીની સંખ્યા' : '૪. પહેલાની સંખ્યા', isAfter ? 'પછી શું આવે?' : 'પહેલા શું આવે?'); 
+            setGameControls(isAfter ? "startGame('after')" : "startGame('before')");
+            
+            let maxNum = currentLevel === 1 ? 20 : 50;
+            let num = Math.floor(Math.random() * (maxNum - 2)) + 2;
+            let ans = isAfter ? num + 1 : num - 1;
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `સાચો વિકલ્પ પસંદ કરો!`;
+            gameArea.innerHTML = `<div class="math-eq">${isAfter ? toGuj(num) + ' , ❓' : '❓ , ' + toGuj(num)}</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = num + (Math.floor(Math.random() * 10) - 5); 
+                if(r > 0 && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 5: Compare Numbers (Bigger/Smaller)
+        function initCompareGame() {
+            showGameUI('૫. નાની-મોટી સંખ્યા', 'મોટી કે નાની સંખ્યા ઓળખો!'); setGameControls("startGame('compare')");
+            let isAskBig = Math.random() > 0.5;
+            let maxNum = currentLevel === 1 ? 20 : 100;
+            let num1 = Math.floor(Math.random() * maxNum) + 1;
+            let num2 = Math.floor(Math.random() * maxNum) + 1;
+            while(num1 === num2) num2 = Math.floor(Math.random() * maxNum) + 1;
+            
+            let ans = isAskBig ? Math.max(num1, num2) : Math.min(num1, num2);
+            instruction.style.color = 'var(--display-color)'; 
+            instruction.innerHTML = isAskBig ? 'મોટી સંખ્યા કઈ છે?' : 'નાની સંખ્યા કઈ છે?';
+            gameArea.innerHTML = '';
+            
+            let options = [num1, num2];
+            options.sort(() => 0.5 - Math.random());
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.style.fontSize = '40px'; btn.style.padding = '20px 40px'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; gameArea.appendChild(btn);
+            });
+            startTimer();
+        }
+
+        // 6: Patterns
+        function initPatternGame() {
+            showGameUI('૬. પેટર્ન પૂર્ણ કરો', 'પેટર્ન સમજો અને આગળ શું આવશે તે પસંદ કરો!'); setGameControls("startGame('pattern')");
+            let emojis = ['🍎','🍌','🚗','🚌','🐶','🐱','🔴','🔵'].sort(() => 0.5 - Math.random());
+            let A = emojis[0], B = emojis[1], C = emojis[2];
+            
+            let patternType = currentLevel === 1 ? 1 : Math.floor(Math.random()*3)+1;
+            let seqDisplay = "", ansEmoji = "";
+            if(patternType === 1) { seqDisplay = `${A} ${B} ${A} ${B} ${A} ❓`; ansEmoji = B; } // ABABA_
+            if(patternType === 2) { seqDisplay = `${A} ${A} ${B} ${A} ${A} ❓`; ansEmoji = B; } // AABAA_
+            if(patternType === 3) { seqDisplay = `${A} ${B} ${C} ${A} ${B} ❓`; ansEmoji = C; } // ABCAB_
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `ખાલી જગ્યામાં શું આવશે?`;
+            gameArea.innerHTML = `<div class="math-eq" style="letter-spacing: 10px;">${seqDisplay}</div>`;
+            
+            let options = [ansEmoji];
+            while(options.length < getOptCount()) { 
+                let r = emojis[Math.floor(Math.random()*emojis.length)]; 
+                if(!options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.style.fontSize = '35px'; btn.innerText = opt;
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ansEmoji){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 8: Missing Letter (Gujarati)
+        function initMissingLetterGame() {
+            showGameUI('૮. ખૂટતો અક્ષર', 'શબ્દ પૂરો કરવા સાચો અક્ષર પસંદ કરો!'); setGameControls("startGame('missing_letter')");
+            const words = currentLevel === 1 ? ['કમળ', 'મગર', 'બતક', 'રમત', 'પવન'] : ['સફરજન', 'કરવત', 'વહાણ', 'કાબર', 'પોપટ'];
+            let word = words[Math.floor(Math.random() * words.length)];
+            let hideIndex = Math.floor(Math.random() * word.length);
+            let ansChar = word[hideIndex];
+            
+            let displayWord = word.split('').map((char, i) => i === hideIndex ? '_' : char).join(' ');
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `શબ્દ પૂરો કરો!`;
+            gameArea.innerHTML = `<div class="math-eq" style="letter-spacing: 5px;">${displayWord}</div>`;
+            
+            let options = [ansChar];
+            const letters = "કખગઘચછજઝટઠડઢણતથદધનપફબભમયરલવશષસહળઅઆઇઈઉઊએઐઓઔઅંઅઃ".split('');
+            while(options.length < getOptCount()) { 
+                let r = letters[Math.floor(Math.random()*letters.length)]; 
+                if(!options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = opt;
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ansChar){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 11: Capital to Small (A -> a)
+        function initEngLettersGame() {
+            showGameUI('૧૧. Capital - Small', 'Capital અક્ષરનો Small અક્ષર શોધો!'); setGameControls("startGame('eng_letters')");
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let randIndex = Math.floor(Math.random() * 26);
+            let cap = letters[randIndex];
+            let ans = cap.toLowerCase();
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `'${cap}' નો નાનો (Small) અક્ષર કયો છે?`;
+            gameArea.innerHTML = `<div class="game-obj" style="font-size: 80px; font-weight:bold; color:var(--text-color); cursor:default;">${cap}</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = letters[Math.floor(Math.random()*26)].toLowerCase(); 
+                if(!options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div'); bc.style.width = '100%';
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = opt;
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // Generic Round Function (Vocab/Matching)
+        function playGenericRound(title, guide, dataset, nameKey, emojiKey, showNamePrompt, isSequenceGame = false) {
+            showGameUI(title, guide); 
+            // Map function dynamically based on title to keep restart working
+            let fName = "startGame('guj_words')";
+            if(title.includes('વાર')) fName = "startGame('days')";
+            if(title.includes('મહિના')) fName = "startGame('months')";
+            if(title.includes('English')) fName = "startGame('eng_words')";
+            if(title.includes('શરીર')) fName = "startGame('body_parts')";
+            if(title.includes('પ્રાણી')) fName = "startGame('animals')";
+            if(title.includes('વાહન')) fName = "startGame('vehicles')";
+            if(title.includes('ઋતુઓ')) fName = "startGame('seasons')";
+            setGameControls(fName);
+            
+            let targetIdx = Math.floor(Math.random() * (isSequenceGame ? dataset.length - 1 : dataset.length));
+            let targetItem = dataset[targetIdx];
+            let correctAns = isSequenceGame ? dataset[targetIdx + 1] : targetItem; // If sequence, answer is the next item
+
+            instruction.style.color = 'var(--display-color)'; 
+            if(showNamePrompt) instruction.innerHTML = `'${targetItem[nameKey]}' શોધો!`;
+            else if(isSequenceGame) instruction.innerHTML = `'${targetItem[nameKey]}' પછી શું આવે?`;
+            else instruction.innerHTML = `${targetItem[emojiKey]} ને શું કહેવાય?`; // Not used currently based on setups above
+            
+            let opts = getOptCount(); 
+            let options = [correctAns];
+            let pool = [...dataset].filter(i => i[nameKey] !== correctAns[nameKey]).sort(() => 0.5 - Math.random());
+            for(let i=1; i<opts; i++) options.push(pool[i-1]);
+            options.sort(() => 0.5 - Math.random());
+            
+            gameArea.innerHTML = '';
+            let bc = document.createElement('div');
+            options.forEach((item) => {
+                if(showNamePrompt) {
+                    // Show Emojis to click
+                    let el = document.createElement('div'); el.className = 'game-obj'; el.innerText = item[emojiKey];
+                    el.onclick = function() {
+                        hideTimer();
+                        if (item[nameKey] === correctAns[nameKey]) { this.classList.add('popped'); playPopSound(); setTimeout(showWinState, 300); } 
+                        else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); instruction.style.color='red'; }
+                    }; gameArea.appendChild(el);
+                } else {
+                    // Show Text buttons to click (For Days/Months sequence)
+                    let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = item[nameKey];
+                    btn.onclick = function() {
+                        hideTimer();
+                        if (item[nameKey] === correctAns[nameKey]) { playPopSound(); showWinState(); } 
+                        else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; }
+                    }; bc.appendChild(btn);
+                }
+            });
+            if(!showNamePrompt) gameArea.appendChild(bc);
+            startTimer(); 
+        }
+
+    </script>
+</body>
+</html>

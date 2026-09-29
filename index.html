@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>આપણી ડિજિટલ સ્કૂલ (Our Digital School)</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #E0F7FA 0%, #B2EBF2 100%);
+            --text-color: #1A237E;
+            --nav-bg: #1565C0;
+            --nav-text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            --text-color: #E0E0E0;
+            --nav-bg: #E91E63;
+            --nav-text: #ffffff;
+            --card-bg: rgba(22, 33, 62, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            margin: 0; padding: 0; background: var(--bg-gradient); color: var(--text-color);
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; transition: 0.5s ease-in-out; min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* --- Floating Background Shapes (UPDATED) --- */
+        .bg-shapes {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .shape { 
+            position: absolute; opacity: 0.25; 
+            animation: float 15s infinite linear; 
+        }
+        [data-theme="dark"] .shape { opacity: 0.15; }
+        
+        .shape:nth-child(1) { left: 5%; top: 80%; animation-duration: 18s; font-size: 50px; }
+        .shape:nth-child(2) { left: 85%; top: 10%; animation-duration: 22s; font-size: 60px; }
+        .shape:nth-child(3) { left: 15%; top: 70%; animation-duration: 15s; font-size: 45px; }
+        .shape:nth-child(4) { left: 75%; top: 80%; animation-duration: 25s; font-size: 55px; }
+        .shape:nth-child(5) { left: 50%; top: 40%; animation-duration: 20s; font-size: 70px; }
+        .shape:nth-child(6) { left: 25%; top: 20%; animation-duration: 19s; font-size: 40px; }
+        .shape:nth-child(7) { left: 65%; top: 60%; animation-duration: 24s; font-size: 50px; }
+        .shape:nth-child(8) { left: 40%; top: 90%; animation-duration: 17s; font-size: 65px; }
+        .shape:nth-child(9) { left: 90%; top: 50%; animation-duration: 21s; font-size: 45px; }
+        .shape:nth-child(10) { left: 10%; top: 40%; animation-duration: 23s; font-size: 55px; }
+
+        @keyframes float { 
+            0% { transform: translateY(120vh) rotate(0deg); } 
+            100% { transform: translateY(-30vh) rotate(360deg); } 
+        }
+
+        /* --- Navbar --- */
+        #navbar {
+            background-color: var(--nav-bg); color: var(--nav-text); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; z-index: 10;
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2); border: 2px solid #fff; color: #fff; padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 22px; transition: 0.3s;
+        }
+        .nav-btn:hover { background: #fff; color: var(--nav-bg); transform: scale(1.05); }
+        .nav-title { font-size: 26px; font-weight: bold; letter-spacing: 1px; }
+
+        /* --- Main Container --- */
+        #app-container { width: 95vw; max-width: 1100px; margin: 30px auto; position: relative; z-index: 10; }
+        
+        .glass-box {
+            margin-bottom: 40px; padding: 30px 20px; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--card-border); backdrop-filter: blur(10px); box-shadow: var(--shadow);
+        }
+        
+        .hero-title { font-size: 34px; font-weight: bold; margin: 0 0 15px 0; color: #E91E63; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        [data-theme="dark"] .hero-title { color: #FFC107; }
+        .hero-desc { font-size: 18px; margin: 0 auto; max-width: 900px; line-height: 1.8; font-weight: 500; }
+        .highlight { color: #E91E63; font-weight: bold; }
+        [data-theme="dark"] .highlight { color: #FF9800; }
+
+        /* --- Single Grid for all Cards --- */
+        .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 5px; margin-bottom: 40px;
+        }
+        
+        .class-card {
+            background: var(--card-bg); border-radius: 20px; padding: 25px 15px; cursor: pointer;
+            box-shadow: var(--shadow); backdrop-filter: blur(8px); border: 1px solid var(--card-border);
+            border-bottom: 8px solid #FF9800; display: flex; flex-direction: column; align-items: center; 
+            text-decoration: none; color: inherit; transition: all 0.4s ease;
+            position: relative; overflow: hidden; 
+        }
+        .class-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        
+        .card-play { border-bottom-color: #E91E63; } 
+        .card-primary { border-bottom-color: #4CAF50; } 
+        .card-upper { border-bottom-color: #2196F3; } 
+        .card-high { border-bottom-color: #9C27B0; } 
+        .card-comp { border-bottom-color: #00BCD4; } 
+
+        .class-icon { font-size: 55px; margin-bottom: 10px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2)); transition: 0.3s; }
+        .class-card:hover .class-icon { transform: scale(1.1) rotate(5deg); }
+        
+        .class-title { font-size: 22px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .class-sub { font-size: 14px; opacity: 0.9; }
+
+        /* --- Hover Overlay (Category) --- */
+        .card-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .class-card:hover .card-overlay { opacity: 1; }
+        
+        .badge {
+            background: #FF9800; color: white; padding: 8px 18px; border-radius: 20px; font-size: 15px; font-weight: bold; margin: 5px 0; border: 2px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .badge-cat { background: #E91E63; } 
+        .badge-comp { background: #00BCD4; color: #000;}
+
+        /* --- Footer Section --- */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .feature-box { padding: 20px; border-radius: 15px; background: rgba(255,255,255,0.4); border: 1px solid var(--card-border); transition: 0.3s; }
+        .feature-box:hover { background: rgba(255,255,255,0.7); transform: translateY(-5px); }
+        [data-theme="dark"] .feature-box { background: rgba(0,0,0,0.4); }
+        [data-theme="dark"] .feature-box:hover { background: rgba(0,0,0,0.6); }
+        
+        .f-icon { font-size: 40px; margin-bottom: 10px; }
+        .f-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; color: var(--nav-bg); }
+        [data-theme="dark"] .f-title { color: #FFC107; }
+        .f-desc { font-size: 14px; opacity: 0.9; line-height: 1.5; }
+
+        @media (max-width: 768px) {
+            .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .hero-title { font-size: 24px; } .hero-desc { font-size: 15px; }
+            .class-icon { font-size: 40px; } .class-title { font-size: 18px; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Background Shapes -->
+    <div class="bg-shapes">
+        <div class="shape">📚</div>
+        <div class="shape">✏️</div>
+        <div class="shape">🎓</div>
+        <div class="shape">🎒</div>
+        <div class="shape">💻</div>
+        <div class="shape">🔬</div>
+        <div class="shape">🧮</div>
+        <div class="shape">🌍</div>
+        <div class="shape">🎨</div>
+        <div class="shape">💡</div>
+    </div>
+
+    <!-- Navigation -->
+    <div id="navbar">
+        <div class="nav-title">🏫 આપણી ડિજિટલ સ્કૂલ</div>
+        <button class="nav-btn" onclick="toggleTheme()" title="Theme Toggle">🌗</button>
+    </div>
+
+    <div id="app-container">
+        
+        <!-- Header / Value Proposition -->
+        <div class="glass-box">
+            <h1 class="hero-title">સ્માર્ટ એજ્યુકેશન, ઉજ્જવળ ભવિષ્ય! 🚀</h1>
+            <p class="hero-desc">
+                <span class="highlight">GSEB અને NCERT</span> અભ્યાસક્રમ આધારિત ભારતનું સૌથી આધુનિક ઇન્ટરેક્ટિવ લર્નિંગ પ્લેટફોર્મ.<br> 
+                પ્લેહાઉસથી પ્રાથમિક, પ્રાથમિકથી માધ્યમિક અને માધ્યમિકથી ઉચ્ચતર માધ્યમિક સુધીના તમામ બાળકો માટે ખાસ તૈયાર કરેલ.<br>
+                હવે ગોખણપટ્ટી છોડો, રમતાં-રમતાં શીખો અને આવનારી દરેક પરીક્ષા માટે તૈયાર થાઓ!
+            </p>
+        </div>
+        
+        <!-- SINGLE COMBINED GRID FOR ALL CLASSES -->
+        <div class="menu-grid">
+            
+            <a href="playhouse.html" class="class-card card-play">
+                <div class="class-icon">🎈</div><div class="class-title">Play House</div><div class="class-sub">બાલ મંદિર (LKG/UKG)</div>
+                <div class="card-overlay"><span class="badge badge-cat">પૂર્વ-પ્રાથમિક</span></div>
+            </a>
+            
+            <a href="class1.html" class="class-card card-primary">
+                <div class="class-icon">🍎</div><div class="class-title">ધોરણ ૧</div><div class="class-sub">ગણિત ગમ્મત, કલરવ</div>
+                <div class="card-overlay"><span class="badge badge-cat">પ્રાથમિક શિક્ષણ</span></div>
+            </a>
+            
+            <a href="class2.html" class="class-card card-primary">
+                <div class="class-icon">✏️</div><div class="class-title">ધોરણ ૨</div><div class="class-sub">કલ્લોલ, ગણિત</div>
+                <div class="card-overlay"><span class="badge badge-cat">પ્રાથમિક શિક્ષણ</span></div>
+            </a>
+            
+            <a href="class3.html" class="class-card card-primary">
+                <div class="class-icon">📖</div><div class="class-title">ધોરણ ૩</div><div class="class-sub">આસપાસ, ગણિત</div>
+                <div class="card-overlay"><span class="badge badge-cat">પ્રાથમિક શિક્ષણ</span></div>
+            </a>
+            
+            <a href="class4.html" class="class-card card-primary">
+                <div class="class-icon">🌍</div><div class="class-title">ધોરણ ૪</div><div class="class-sub">કુહૂ, પર્યાવરણ</div>
+                <div class="card-overlay"><span class="badge badge-cat">પ્રાથમિક શિક્ષણ</span></div>
+            </a>
+            
+            <a href="class5.html" class="class-card card-primary">
+                <div class="class-icon">🧠</div><div class="class-title">ધોરણ ૫</div><div class="class-sub">કેકારવ, આસપાસ</div>
+                <div class="card-overlay"><span class="badge badge-cat">પ્રાથમિક શિક્ષણ</span></div>
+            </a>
+
+            <a href="class6.html" class="class-card card-upper">
+                <div class="class-icon">🔬</div><div class="class-title">ધોરણ ૬</div><div class="class-sub">વિજ્ઞાન, સા.વિજ્ઞાન</div>
+                <div class="card-overlay"><span class="badge badge-cat">ઉચ્ચ પ્રાથમિક</span></div>
+            </a>
+            
+            <a href="class7.html" class="class-card card-upper">
+                <div class="class-icon">🧪</div><div class="class-title">ધોરણ ૭</div><div class="class-sub">ગણિત, વિજ્ઞાન, ભાષા</div>
+                <div class="card-overlay"><span class="badge badge-cat">ઉચ્ચ પ્રાથમિક</span></div>
+            </a>
+            
+            <a href="class8.html" class="class-card card-upper">
+                <div class="class-icon">💻</div><div class="class-title">ધોરણ ૮</div><div class="class-sub">એડવાન્સ ક્વિઝ</div>
+                <div class="card-overlay"><span class="badge badge-cat">ઉચ્ચ પ્રાથમિક</span></div>
+            </a>
+
+            <a href="class9.html" class="class-card card-high">
+                <div class="class-icon">🚀</div><div class="class-title">ધોરણ ૯</div><div class="class-sub">બોર્ડની તૈયારીનો પાયો</div>
+                <div class="card-overlay"><span class="badge badge-cat">માધ્યમિક શિક્ષણ</span></div>
+            </a>
+            
+            <a href="class10.html" class="class-card card-high">
+                <div class="class-icon">💯</div><div class="class-title">ધોરણ ૧૦</div><div class="class-sub">SSC Board Prep</div>
+                <div class="card-overlay"><span class="badge badge-cat">માધ્યમિક શિક્ષણ</span></div>
+            </a>
+
+            <a href="class11.html" class="class-card card-high">
+                <div class="class-icon">📊</div><div class="class-title">ધોરણ ૧૧</div><div class="class-sub">કોમર્સ (Commerce)</div>
+                <div class="card-overlay"><span class="badge badge-cat">ઉચ્ચતર માધ્યમિક</span></div>
+            </a>
+            
+            <a href="class12.html" class="class-card card-high">
+                <div class="class-icon">🏆</div><div class="class-title">ધોરણ ૧૨</div><div class="class-sub">HSC Board Prep</div>
+                <div class="card-overlay"><span class="badge badge-cat">ઉચ્ચતર માધ્યમિક</span></div>
+            </a>
+
+            <a href="comp_basic.html" class="class-card card-comp">
+                <div class="class-icon">⌨️</div><div class="class-title">Basic Computer</div><div class="class-sub">ધોરણ ૧ થી ૫ માટે</div>
+                <div class="card-overlay"><span class="badge badge-comp">કમ્પ્યુટર જ્ઞાન</span></div>
+            </a>
+            
+            <a href="comp_adv.html" class="class-card card-comp">
+                <div class="class-icon">🖥️</div><div class="class-title">Adv. Computer</div><div class="class-sub">ધોરણ ૬ થી ૧૨ માટે</div>
+                <div class="card-overlay"><span class="badge badge-comp">કમ્પ્યુટર જ્ઞાન</span></div>
+            </a>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="glass-box" style="margin-bottom: 20px;">
+            <h2 class="hero-title" style="font-size: 24px;">શા માટે આપણું પ્લેટફોર્મ સર્વશ્રેષ્ઠ છે?</h2>
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="f-icon">🎮</div>
+                    <div class="f-title">રમત સાથે જ્ઞાન (Play & Learn)</div>
+                    <div class="f-desc">ગોખણપટ્ટીથી મુક્તિ! ઇન્ટરેક્ટિવ ગેમ્સ અને એનિમેશન દ્વારા અઘરા વિષયો પણ સરળતાથી સમજો.</div>
+                </div>
+                <div class="feature-box">
+                    <div class="f-icon">⏱️</div>
+                    <div class="f-title">સ્પીડ અને ચોકસાઈ (Accuracy)</div>
+                    <div class="f-desc">ટાઈમર આધારિત MCQ ગેમ્સથી બાળકોની વિચારવાની ઝડપ, એકાગ્રતા અને નિર્ણય શક્તિ વધે છે.</div>
+                </div>
+                <div class="feature-box">
+                    <div class="f-icon">🎯</div>
+                    <div class="f-title">બોર્ડની મજબૂત તૈયારી</div>
+                    <div class="f-desc">GSEB / NCERT ના નવા અભ્યાસક્રમ મુજબ તૈયાર કરેલો પાયાનો અને એડવાન્સ ડેટાબેઝ.</div>
+                </div>
+                <div class="feature-box">
+                    <div class="f-icon">🛡️</div>
+                    <div class="f-title">સ્માર્ટ અને સુરક્ષિત પ્લેટફોર્મ</div>
+                    <div class="f-desc">જાહેરાતો (Ads) વગરનું સુરક્ષિત વાતાવરણ. ડાર્ક થીમ (Dark Mode) બાળકોની આંખોને સુરક્ષિત રાખે છે.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let isDarkMode = localStorage.getItem('theme') !== 'light'; 
+        function applyTheme() {
+            if (isDarkMode) {
+                document.body.setAttribute('data-theme', 'dark');
+            } else {
+                document.body.removeAttribute('data-theme');
+            }
+        }
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            applyTheme();
+        }
+        applyTheme();
+    </script>
+</body>
+</html>

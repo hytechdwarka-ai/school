@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 8 Learning Hub (ધોરણ 8)</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg-color: #E0F7FA; --text-color: #333333;
+            --nav-bg: #FF9800; --nav-text: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --border-color: #4CAF50; --display-color: #E91E63;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e; --text-color: #e0e0e0;
+            --nav-bg: #e94560; --nav-text: #ffffff;
+            --card-bg: rgba(22, 33, 62, 0.8);
+            --border-color: #0f3460; --display-color: #ffb400;
+        }
+
+        body {
+            margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-color);
+            font-family: 'Comic Sans MS', sans-serif; text-align: center; transition: 0.4s; overflow-x: hidden; touch-action: manipulation;
+        }
+
+        /* Top Navigation */
+        #navbar {
+            background-color: var(--nav-bg); color: var(--nav-text); padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2); border: 2px solid #fff; color: #fff; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 22px; transition: 0.2s;
+        }
+        .nav-btn:hover { background: #fff; color: var(--nav-bg); }
+        .category-title { font-size: 24px; font-weight: bold; }
+
+        /* Main App Container */
+        #app-container {
+            width: 95vw; max-width: 1000px; margin: 15px auto; background: var(--card-bg);
+            border-radius: 25px; border: 3px solid var(--border-color); padding: 25px 15px; box-sizing: border-box; min-height: 65vh;
+        }
+
+        /* --- Menu Header --- */
+        #menu-header { margin-bottom: 25px; padding: 0 10px; }
+        #menu-header h2 { font-size: 26px; font-weight: bold; color: var(--display-color); margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        #menu-header p { font-size: 16px; color: var(--text-color); line-height: 1.6; max-width: 750px; margin: 0 auto; font-weight: 500; margin-bottom: 20px;}
+        
+        /* Level Selector */
+        .level-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;}
+        .level-btn {
+            background: rgba(255,255,255,0.5); border: 3px solid #ccc; padding: 10px 30px; font-size: 18px; font-weight: bold;
+            border-radius: 15px; cursor: pointer; transition: 0.3s; color: var(--text-color);
+        }
+        .level-btn.active { border-color: #4CAF50; background: #4CAF50; color: white; box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4); transform: scale(1.05);}
+        [data-theme="dark"] .level-btn.active { background: #E91E63; border-color: #E91E63; box-shadow: 0 4px 10px rgba(233, 30, 99, 0.4); }
+
+        /* --- Menu View (Grid Layout) --- */
+        #menu-view { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; padding: 5px; }
+        .menu-card {
+            width: 100%; aspect-ratio: 1; background: #fff; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: none; border-bottom: 8px solid transparent; transition: 0.3s; color: #333; padding: 10px; box-sizing: border-box;
+        }
+        .menu-card:hover { transform: translateY(-6px); box-shadow: 0 10px 18px rgba(0,0,0,0.25); }
+        .menu-icon { font-size: 42px; margin-bottom: 5px; }
+        .menu-title { font-size: 14px; font-weight: bold; text-align: center; line-height: 1.3; word-wrap: break-word; }
+        
+        /* Menu Colors */
+        #menu-1 { border-bottom-color: #F44336; } #menu-2 { border-bottom-color: #9C27B0; }
+        #menu-3 { border-bottom-color: #03A9F4; } #menu-4 { border-bottom-color: #4CAF50; }
+        #menu-5 { border-bottom-color: #FF9800; } #menu-6 { border-bottom-color: #795548; }
+        #menu-7 { border-bottom-color: #E91E63; } #menu-8 { border-bottom-color: #607D8B; }
+        #menu-9 { border-bottom-color: #8E24AA; } #menu-10 { border-bottom-color: #D32F2F; }
+        #menu-11 { border-bottom-color: #00897B; } #menu-12 { border-bottom-color: #FBC02D; }
+        #menu-13 { border-bottom-color: #8D6E63; } #menu-14 { border-bottom-color: #00BCD4; }
+        #menu-15 { border-bottom-color: #5C6BC0; } #menu-16 { border-bottom-color: #FF5722; }
+
+        @media (max-width: 600px) {
+            #menu-view { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .menu-icon { font-size: 38px; } .menu-title { font-size: 13px; }
+            .category-title { font-size: 18px; } .nav-btn { font-size: 18px; padding: 5px 10px; }
+            #menu-header h2 { font-size: 20px; } #menu-header p { font-size: 14px; }
+            #app-container { padding: 15px 10px; margin: 10px; }
+            .level-btn { font-size: 15px; padding: 8px 20px;}
+        }
+        
+        @media (min-width: 1000px) {
+            #menu-view { grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 850px; margin: 0 auto; }
+            .menu-icon { font-size: 48px; } .menu-title { font-size: 16px; }
+            #app-container { padding: 35px; }
+        }
+
+        /* --- Game View --- */
+        #game-view { display: none; }
+        #guide-box { background: rgba(255,255,255,0.5); padding: 10px; border-radius: 10px; border: 2px dashed var(--border-color); font-size: 16px; color: #1565C0; font-weight: bold; margin-bottom: 15px; }
+        [data-theme="dark"] #guide-box { color: #64B5F6; background: rgba(0,0,0,0.3); }
+        
+        #instruction-display { font-size: 26px; color: var(--display-color); font-weight: bold; margin-bottom: 10px; min-height: 40px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        
+        /* TIMER UI */
+        #timer-container {
+            width: 80%; max-width: 400px; margin: 0 auto 20px auto; background: rgba(255,255,255,0.2); 
+            border-radius: 15px; border: 2px solid var(--border-color); position: relative; height: 28px; overflow: hidden; display: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #timer-bar { height: 100%; background: #4CAF50; width: 100%; transition: width 1s linear, background-color 0.5s; }
+        #timer-text { position: absolute; top: 0; left: 0; right: 0; bottom: 0; line-height: 28px; font-size: 16px; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+        #game-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px; min-height: 250px; padding: 10px 0 20px 0; }
+
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px) rotate(-5deg); } 50% { transform: translateX(8px) rotate(5deg); } 75% { transform: translateX(-8px) rotate(-5deg); } }
+
+        .ans-btn { background: #fff; border: 3px solid var(--border-color); color: #333; font-size: 20px; font-weight: bold; padding: 10px 20px; border-radius: 15px; cursor: pointer; transition: 0.2s; margin: 5px; box-shadow: 0 4px 0 var(--border-color);}
+        .ans-btn:active { transform: translateY(4px); box-shadow: none; background: var(--border-color); color: white; }
+        
+        .action-btn { background-color: #4CAF50; color: white; border: none; padding: 12px 25px; font-size: 20px; border-radius: 12px; cursor: pointer; box-shadow: 0 5px 0 #2E7D32; margin: 10px; }
+        .action-btn:active { transform: translateY(5px); box-shadow: none; }
+        .menu-return-btn { background-color: #E91E63; box-shadow: 0 5px 0 #AD1457; }
+        
+        .math-eq { font-size: 32px; font-weight: bold; color: var(--text-color); margin-bottom: 20px; background: rgba(255,255,255,0.4); padding: 15px 30px; border-radius: 20px; border: 2px dashed var(--display-color); line-height: 1.4;}
+        [data-theme="dark"] .math-eq { background: rgba(0,0,0,0.4); }
+        /* Footer Style */
+        footer {
+            margin: 20px auto 30px auto;
+            text-align: center;
+        }
+        .school-btn {
+            display: inline-block;
+            background-color: #303030;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .school-btn:hover {
+            background-color: #43A047;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+        }
+		
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div id="navbar">
+        <button id="nav-home-btn" class="nav-btn" onclick="showMenu()" style="display:none;" title="Menu">🏠 મેનૂ</button>
+        <div id="nav-title" class="category-title">ધોરણ ૮ (Class 8)</div>
+        <button class="nav-btn" onclick="toggleTheme()" title="Theme">🌗</button>
+    </div>
+
+    <div id="app-container">
+        <!-- Main Title -->
+        <div id="menu-header">
+            <h2>✨ જ્ઞાન અને બુદ્ધિની કસોટી! ✨</h2>
+            <p>
+                ધોરણ ૮ ના વિદ્યાર્થીઓ માટે ગણિત (વર્ગ-વર્ગમૂળ, સમીકરણ), વિજ્ઞાન (બળ-દબાણ, સૂક્ષ્મજીવો), અને સામાજિક વિજ્ઞાનની એડવાન્સ કસોટીઓ. 🎒<br>
+                તમારી બૌદ્ધિક ક્ષમતા સાબિત કરો. ટાઈમર પૂરું થાય તે પહેલાં જવાબ આપો!
+            </p>
+            <div class="level-container">
+                <button id="btn-lvl-1" class="level-btn active" onclick="setLevel(1)">સરળ (Easy)</button>
+                <button id="btn-lvl-2" class="level-btn" onclick="setLevel(2)">અઘરું (Hard)</button>
+            </div>
+        </div>
+        
+        <!-- MENU VIEW (16 GAMES FOR CLASS 8) -->
+        <div id="menu-view">
+            <!-- Math -->
+            <div class="menu-card" id="menu-1" onclick="startGame('squares')"><div class="menu-icon">x²</div><div class="menu-title">૧. વર્ગ-વર્ગમૂળ</div></div>
+            <div class="menu-card" id="menu-2" onclick="startGame('cubes')"><div class="menu-icon">x³</div><div class="menu-title">૨. ઘન-ઘનમૂળ</div></div>
+            <div class="menu-card" id="menu-3" onclick="startGame('equations')"><div class="menu-icon">x+y</div><div class="menu-title">૩. સુરેખ સમીકરણ</div></div>
+            <div class="menu-card" id="menu-4" onclick="startGame('geometry')"><div class="menu-icon">⬟</div><div class="menu-title">૪. ચતુષ્કોણ-ભૂમિતિ</div></div>
+            
+            <!-- Gujarati Grammar -->
+            <div class="menu-card" id="menu-5" onclick="startGame('sandhi')"><div class="menu-icon">🔗</div><div class="menu-title">૫. સંધિ અને સમાસ</div></div>
+            <div class="menu-card" id="menu-6" onclick="startGame('sentences')"><div class="menu-icon">❗️❓</div><div class="menu-title">૬. વાક્યના પ્રકાર</div></div>
+            <div class="menu-card" id="menu-7" onclick="startGame('idioms')"><div class="menu-icon">💬</div><div class="menu-title">૭. રૂઢિપ્રયોગો</div></div>
+            <div class="menu-card" id="menu-8" onclick="startGame('proverbs')"><div class="menu-icon">🗣️</div><div class="menu-title">૮. કહેવતો</div></div>
+            
+            <!-- Science -->
+            <div class="menu-card" id="menu-9" onclick="startGame('sci_metals')"><div class="menu-icon">🧲</div><div class="menu-title">૯. ધાતુ - અધાતુ</div></div>
+            <div class="menu-card" id="menu-10" onclick="startGame('sci_force')"><div class="menu-icon">🏋️‍♂️</div><div class="menu-title">૧૦. બળ અને દબાણ</div></div>
+            <div class="menu-card" id="menu-11" onclick="startGame('sci_light')"><div class="menu-icon">🔦</div><div class="menu-title">૧૧. પ્રકાશ અને ધ્વનિ</div></div>
+            <div class="menu-card" id="menu-12" onclick="startGame('sci_microbes')"><div class="menu-icon">🦠</div><div class="menu-title">૧૨. સૂક્ષ્મજીવો</div></div>
+            
+            <!-- Social Science & English -->
+            <div class="menu-card" id="menu-13" onclick="startGame('ss_const')"><div class="menu-icon">📜</div><div class="menu-title">૧૩. આપણું બંધારણ</div></div>
+            <div class="menu-card" id="menu-14" onclick="startGame('ss_history')"><div class="menu-icon">🇮🇳</div><div class="menu-title">૧૪. આધુનિક ભારત</div></div>
+            <div class="menu-card" id="menu-15" onclick="startGame('eng_voice')"><div class="menu-icon">🔄</div><div class="menu-title">૧૫. Active-Passive</div></div>
+            <div class="menu-card" id="menu-16" onclick="startGame('eng_vocab')"><div class="menu-icon">📖</div><div class="menu-title">૧૬. Eng Vocab</div></div>
+        </div>
+
+        <!-- GAME VIEW -->
+        <div id="game-view">
+            <div id="guide-box">Guide Text</div>
+            <div id="instruction-display">Instruction Text</div>
+            
+            <!-- TIMER UI -->
+            <div id="timer-container">
+                <div id="timer-bar"></div>
+                <div id="timer-text">⏳ 40</div>
+            </div>
+
+            <div id="game-area"></div>
+            <div id="controls-area"></div>
+        </div>
+    </div>
+	 <!-- FOOTER -->
+    <footer>
+        <a href="index.html" class="school-btn">🏫 આપણી ડિજિટલ સ્કૂલ</a>
+    </footer>
+
+    <script>
+        let isDarkMode = true; 
+        let currentLevel = 1; 
+        let currentGameType = '';
+        
+        const gameArea = document.getElementById('game-area');
+        const instruction = document.getElementById('instruction-display');
+        const controls = document.getElementById('controls-area');
+
+        function toGuj(num) { 
+            let str = num.toString();
+            let isNeg = str.startsWith('-');
+            if (isNeg) str = str.substring(1);
+            const gujDigits = ['૦','૧','૨','૩','૪','૫','૬','૭','૮','૯'];
+            let gujStr = str.split('').map(d => gujDigits[parseInt(d)] || d).join(''); 
+            return isNeg ? '-' + gujStr : gujStr;
+        }
+
+        // --- DATA ARRAYS FOR CLASS 8 ---
+        
+        // 4. Geometry (Quadrilaterals)
+        const quadData = [
+            {q:'ચતુષ્કોણના ચારેય ખૂણાના માપનો સરવાળો કેટલો થાય?', a:'૩૬૦°', w:['૧૮૦°', '૯૦°', '૭૨૦°', '૫૪૦°', '૨૭૦°', '૧૦૦°', '૩૦૦°']},
+            {q:'નિયમિત ષટ્કોણ (Hexagon) ના અંદરના ખૂણાઓનો સરવાળો?', a:'૭૨૦°', w:['૩૬૦°', '૫૪૦°', '૧૮૦°', '૯૦૦°', '૧૦૮૦°', '૩૦૦°', '૧૦૦૦°']},
+            {q:'સમાંતરબાજુ ચતુષ્કોણમાં સામસામેના ખૂણા કેવા હોય છે?', a:'સમાન', w:['અલગ અલગ', 'કાટખૂણા', 'પૂરકકોણ', 'કોટિકોણ', 'બમણા', 'અડધા', 'વિષમ']},
+            {q:'જેના ચારેય ખૂણા કાટખૂણા અને ચારેય બાજુ સમાન હોય તે?', a:'ચોરસ', w:['લંબચોરસ', 'સમબાજુ ચતુષ્કોણ', 'સમાંતરબાજુ', 'સમલંબ', 'પતંગાકાર', 'ત્રિકોણ', 'વર્તુળ']}
+        ];
+
+        // 5, 6, 7, 8. Gujarati Grammar
+        const sandhiData = [
+            {q:'પ્રતિ + એક = ?', a:'પ્રત્યેક', w:['પ્રતિએક', 'પ્રતીક', 'પ્રતેક', 'પ્રત્યાક', 'પ્રતિઆક', 'પ્રત્યક', 'પ્રતીએક']},
+            {q:'મહા + ઋષિ = ?', a:'મહર્ષિ', w:['મહાર્ષિ', 'મહોર્ષિ', 'મહઋષિ', 'મહરષિ', 'માહર્ષિ', 'મહર્શિ', 'મહિર્ષિ']},
+            {q:'નીચેનામાંથી કયો દ્વંદ્વ સમાસ છે?', a:'માતાપિતા', w:['મહાદેવ', 'નવરાત્રિ', 'દશાનન', 'યથાશક્તિ', 'ગજાનન', 'પ્રતિદિન', 'ચતુર્ભુજ']},
+            {q:'"નવરાત્રિ" કયો સમાસ છે?', a:'દ્વિગુ', w:['દ્વંદ્વ', 'કર્મધારય', 'બહુવ્રીહિ', 'અવ્યયીભાવ', 'તત્પુરુષ', 'મધ્યમપદલોપી', 'ઉપપદ']}
+        ];
+        const sentenceData = [
+            {q:'"અરરર! આ શું થઈ ગયું?" - આ કયું વાક્ય છે?', a:'ઉદ્ગારવાક્ય', w:['પ્રશ્નાર્થવાક્ય', 'વિધાનવાક્ય', 'આજ્ઞાર્થવાક્ય', 'નકારવાક્ય', 'સંયુક્તવાક્ય', 'મિશ્રવાક્ય', 'સાદું વાક્ય']},
+            {q:'"તમારું નામ શું છે?" - આ કયું વાક્ય છે?', a:'પ્રશ્નાર્થવાક્ય', w:['ઉદ્ગારવાક્ય', 'વિધાનવાક્ય', 'આજ્ઞાર્થવાક્ય', 'નકારવાક્ય', 'સાદું વાક્ય', 'મિશ્રવાક્ય', 'સંયુક્તવાક્ય']},
+            {q:'"દરવાજો બંધ કરો." - આ કયું વાક્ય છે?', a:'આજ્ઞાર્થવાક્ય', w:['પ્રશ્નાર્થવાક્ય', 'વિધાનવાક્ય', 'ઉદ્ગારવાક્ય', 'નકારવાક્ય', 'સંયુક્તવાક્ય', 'મિશ્રવાક્ય', 'સાદું વાક્ય']},
+            {q:'"સૂર્ય પૂર્વમાં ઊગે છે." - આ કયું વાક્ય છે?', a:'વિધાનવાક્ય', w:['પ્રશ્નાર્થવાક્ય', 'ઉદ્ગારવાક્ય', 'આજ્ઞાર્થવાક્ય', 'નકારવાક્ય', 'સંયુક્તવાક્ય', 'મિશ્રવાક્ય', 'આશ્ચર્યવાક્ય']}
+        ];
+        const idiomsData = [
+            {q:'આકાશ પાતાળ એક કરવા (અર્થ?)', a:'ખૂબ મહેનત કરવી', w:['જાદુ કરવો', 'આકાશમાં ઉડવું', 'થાકી જવું', 'ઊંઘી જવું', 'દુઃખી થવું', 'ઝઘડો કરવો', 'રડવા લાગવું']},
+            {q:'હાથ ધોઈ નાખવા (અર્થ?)', a:'આશા છોડી દેવી', w:['હાથ સાફ કરવા', 'જમવા બેસવું', 'ખૂબ મહેનત કરવી', 'પૈસા કમાવા', 'ઊભા થવું', 'પગ ધોવા', 'દોડવું']},
+            {q:'કાનમાં ઝેર રેડવું (અર્થ?)', a:'ખોટી ઉશ્કેરણી કરવી', w:['કાનમાં દવા નાખવી', 'કાન સાફ કરવા', 'માર મારવો', 'સલાહ આપવી', 'ગાન સાંભળવું', 'સાચું બોલવું', 'રડાવવું']}
+        ];
+        const proverbsData = [
+            {q:'ઉજ્જડ ગામમાં એરંડો...', a:'પ્રધાન', w:['રાજા', 'મંત્રી', 'શેઠ', 'નોકર', 'માલિક', 'દાસ', 'ગરીબ']},
+            {q:'નાચવું નહિ ને આંગણું...', a:'વાંકું', w:['ખરાબ', 'નાનું', 'મોટું', 'ગંદુ', 'સાંકડું', 'સીધું', 'લાંબુ']},
+            {q:'પાણી પહેલાં...', a:'પાળ બાંધવી', w:['પુલ બાંધવો', 'રસ્તો બનાવવો', 'દોડવું', 'તરી જવું', 'તરસ લાગવી', 'કૂદકો મારવો', 'સુઈ જવું']}
+        ];
+
+        // 9, 10, 11, 12. Science
+        const sciMetalsData = [
+            {q:'પ્રવાહી સ્વરૂપે જોવા મળતી ધાતુ કઈ છે?', a:'પારો (Mercury)', w:['બ્રોમિન', 'સોનું', 'લોખંડ', 'સોડિયમ', 'પોટેશિયમ', 'ઝિંક', 'એલ્યુમિનિયમ']},
+            {q:'સૌથી હલકી ધાતુ કઈ છે?', a:'લિથિયમ', w:['સોડિયમ', 'હીલિયમ', 'હાઈડ્રોજન', 'મેગ્નેશિયમ', 'કેલ્શિયમ', 'કાર્બન', 'પારો']},
+            {q:'કઈ અધાતુ પ્રવાહી સ્વરૂપમાં હોય છે?', a:'બ્રોમિન', w:['પારો', 'કાર્બન', 'સલ્ફર', 'ફોસ્ફરસ', 'આયોડિન', 'ઓક્સિજન', 'નાઈટ્રોજન']},
+            {q:'કઈ ધાતુને ચપ્પા વડે કાપી શકાય છે?', a:'સોડિયમ', w:['લોખંડ', 'તાંબુ', 'ચાંદી', 'સોનું', 'પ્લેટિનમ', 'ટાઈટેનિયમ', 'ઝિંક']}
+        ];
+        const sciForceData = [
+            {q:'દબાણ માપવાનો પ્રમાણભૂત એકમ કયો છે?', a:'પાસ્કલ (Pascal)', w:['ન્યૂટન', 'જૂલ', 'વોટ', 'વોલ્ટ', 'મીટર', 'કિલોગ્રામ', 'હર્ટ્ઝ']},
+            {q:'બળનો એકમ કયો છે?', a:'ન્યૂટન', w:['પાસ્કલ', 'જૂલ', 'વોટ', 'વોલ્ટ', 'એમ્પિયર', 'કેલ્વિન', 'કેન્ડેલા']},
+            {q:'વાતાવરણનું દબાણ માપવા માટે કયું સાધન વપરાય છે?', a:'બેરોમીટર', w:['થર્મોમીટર', 'લેક્ટોમીટર', 'સ્પીડોમીટર', 'હાઈગ્રોમીટર', 'એમીટર', 'વોલ્ટમીટર', 'ગેલવેનોમીટર']},
+            {q:'ઘર્ષણ બળ હંમેશા ગતિની કઈ દિશામાં લાગે છે?', a:'વિરુદ્ધ દિશામાં', w:['સમાન દિશામાં', 'લંબ દિશામાં', 'કોઈ પણ દિશામાં', 'ઉપરની દિશામાં', 'નીચેની દિશામાં', 'વર્તુળાકાર દિશામાં', 'લાગતું નથી']}
+        ];
+        const sciLightData = [
+            {q:'માનવ આંખમાં પ્રતિબિંબ ક્યાં રચાય છે?', a:'નેત્રપટલ (Retina)', w:['કીકી', 'કનિનિકા', 'નેત્રમણિ', 'પારદર્શક પટલ', 'દૃષ્ટિચેતા', 'અંધબિંદુ', 'શ્વેતપટલ']},
+            {q:'ધ્વનિની તીવ્રતા કયા એકમમાં મપાય છે?', a:'ડેસિબલ (dB)', w:['હર્ટ્ઝ (Hz)', 'ન્યૂટન', 'પાસ્કલ', 'મીટર', 'જૂલ', 'વોટ', 'એમ્પિયર']},
+            {q:'ધ્વનિના પ્રસરણ માટે શાની જરૂર પડે છે?', a:'માધ્યમની', w:['પ્રકાશની', 'શૂન્યાવકાશની', 'અંધકારની', 'ગરમીની', 'ચુંબકની', 'વિદ્યુતની', 'માત્ર હવાની']},
+            {q:'સમતલ અરીસામાં કેવું પ્રતિબિંબ મળે છે?', a:'આભાસી અને ચત્તું', w:['વાસ્તવિક અને ઊલટું', 'વાસ્તવિક અને ચત્તું', 'આભાસી અને ઊલટું', 'મોટું અને ચત્તું', 'નાનું અને ઊલટું', 'બિંદુવત', 'અસ્પષ્ટ']}
+        ];
+        const sciMicrobesData = [
+            {q:'દૂધમાંથી દહીં બનાવતો બેક્ટેરિયા કયો છે?', a:'લેક્ટોબેસિલસ', w:['રાઇઝોબિયમ', 'સાલ્મોનેલા', 'પેનિસિલિયમ', 'વાયરસ', 'ફૂગ', 'પ્રજીવ', 'સ્પાયરોગાયરા']},
+            {q:'મેલેરિયા નામનો રોગ કોનાથી થાય છે?', a:'પ્રજીવ (પ્લાઝમોડિયમ)', w:['વાયરસ', 'બેક્ટેરિયા', 'ફૂગ', 'લીલ', 'કૃમિ', 'ધૂળ', 'પાણી']},
+            {q:'પેનિસિલિન નામની એન્ટીબાયોટીકની શોધ કોણે કરી?', a:'એલેક્ઝાન્ડર ફ્લેમિંગ', w:['લૂઈ પાશ્ચર', 'એડવર્ડ જેનર', 'રોબર્ટ કોશ', 'ન્યૂટન', 'આઈન્સ્ટાઈન', 'મેડમ ક્યુરી', 'ગેલિલિયો']},
+            {q:'શરદી અને શરદીનો તાવ (Flu) શેનાથી થાય છે?', a:'વાયરસ', w:['બેક્ટેરિયા', 'ફૂગ', 'પ્રજીવ', 'લીલ', 'કૃમિ', 'પ્રદૂષણ', 'ખોરાક']}
+        ];
+
+        // 13, 14. Social Science
+        const constitutionData = [
+            {q:'ભારતીય બંધારણના ઘડવૈયા (પિતા) કોને કહેવાય છે?', a:'ડૉ. બી.આર. આંબેડકર', w:['મહાત્મા ગાંધી', 'સરદાર પટેલ', 'જવાહરલાલ નેહરુ', 'ડૉ. રાજેન્દ્ર પ્રસાદ', 'સુભાષચંદ્ર બોઝ', 'ભગત સિંહ', 'લોકમાન્ય તિલક']},
+            {q:'બંધારણ સભાના અધ્યક્ષ કોણ હતા?', a:'ડૉ. રાજેન્દ્ર પ્રસાદ', w:['ડૉ. બી.આર. આંબેડકર', 'સરદાર પટેલ', 'મહાત્મા ગાંધી', 'જવાહરલાલ નેહરુ', 'સચિદાનંદ સિંહા', 'લાલ બહાદુર શાસ્ત્રી', 'ઇન્દિરા ગાંધી']},
+            {q:'ભારતનું બંધારણ ક્યારે અમલમાં આવ્યું?', a:'૨૬ જાન્યુઆરી ૧૯૫૦', w:['૧૫ ઓગસ્ટ ૧૯૪૭', '૨૬ નવેમ્બર ૧૯૪૯', '૧ મે ૧૯૬૦', '૨ ઓક્ટોબર ૧૯૪૭', '૧૫ ઓગસ્ટ ૧૯૫૦', '૨૬ જાન્યુઆરી ૧૯૪૭', '૩૦ જાન્યુઆરી ૧૯૪૮']},
+            {q:'આપણા બંધારણમાં મૂળભૂત અધિકારો કયા દેશ પાસેથી લેવાયા છે?', a:'અમેરિકા (USA)', w:['બ્રિટન', 'રશિયા', 'જાપાન', 'ચીન', 'ફ્રાન્સ', 'આયર્લેન્ડ', 'ઓસ્ટ્રેલિયા']}
+        ];
+        const historyData = [
+            {q:'૧૮૫૭ ના સ્વાતંત્ર્ય સંગ્રામનો પ્રથમ શહીદ કોણ હતો?', a:'મંગલ પાંડે', w:['તાત્યા ટોપે', 'રાણી લક્ષ્મીબાઈ', 'ભગત સિંહ', 'કુંવરસિંહ', 'નાનાસાહેબ પેશ્વા', 'બહાદુરશાહ ઝફર', 'ચંદ્રશેખર આઝાદ']},
+            {q:'જલિયાંવાલા બાગ હત્યાકાંડ કઈ સાલમાં થયો હતો?', a:'૧૯૧૯', w:['૧૯૨૦', '૧૯૪૨', '૧૮૫૭', '૧૯૩૦', '૧૯૪૭', '૧૯૦૫', '૧૯૧૫']},
+            {q:'દાંડીકૂચની શરૂઆત ક્યાંથી થઈ હતી?', a:'સાબરમતી આશ્રમ', w:['દાંડી', 'પોરબંદર', 'વર્ધા', 'કરમસદ', 'રાજકોટ', 'સુરત', 'વલસાડ']},
+            {q:'"કરેંગે યા મરેંગે" નો નારો ગાંધીજીએ કઈ ચળવળમાં આપ્યો?', a:'હિંદ છોડો (1942)', w:['અસહકાર', 'સવિનય કાનૂનભંગ', 'દાંડીકૂચ', 'ખેડા સત્યાગ્રહ', 'ચંપારણ સત્યાગ્રહ', 'સ્વદેશી ચળવળ', 'બારડોલી સત્યાગ્રહ']}
+        ];
+
+        // 15, 16. English
+        const engVoiceData = [
+            {q:'Change to Passive: "I eat an apple."', a:'An apple is eaten by me.', w:['An apple was eaten by me.', 'An apple is eat by me.', 'An apple eats me.', 'I am eating an apple.', 'An apple has eaten by me.', 'Apple is eating by me.', 'An apple had eaten by me.']},
+            {q:'Change to Passive: "He opened the door."', a:'The door was opened by him.', w:['The door is opened by him.', 'The door opened by him.', 'He was opening the door.', 'The door had opened by him.', 'The door opens by him.', 'He is opened the door.', 'Door open by him.']},
+            {q:'Change to Active: "A song is sung by her."', a:'She sings a song.', w:['She sang a song.', 'She is singing a song.', 'She has sung a song.', 'Her sing a song.', 'She sing a song.', 'A song sings her.', 'She will sing a song.']}
+        ];
+        const engVocabData = [
+            {q:'Synonym of "Huge"', a:'Massive', w:['Tiny', 'Small', 'Little', 'Short', 'Thin', 'Narrow', 'Weak']},
+            {q:'Antonym of "Ancient"', a:'Modern', w:['Old', 'Past', 'History', 'Antique', 'Classic', 'Aged', 'Early']},
+            {q:'Find correct plural: "Knife"', a:'Knives', w:['Knifes', 'Knife', 'Knifi', 'Knive', 'Knifess', 'Kneves', 'Kneefs']},
+            {q:'"Patience" એટલે શું?', a:'ધીરજ', w:['ગુસ્સો', 'ઉતાવળ', 'ડર', 'હિંમત', 'તાકાત', 'નિરાશા', 'આનંદ']}
+        ];
+        
+        const winMessages = ["ખૂબ સરસ! 👏", "અદ્ભુત! 🌟", "વાહ! કમાલ કરી દીધી! 🎉", "શાબાશ! 🏅", "એકદમ સાચો જવાબ! 🧠"];
+
+        function getOptCount() { return currentLevel === 1 ? 5 : 8; } 
+
+        // --- AUDIO ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playPopSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); 
+            gain.gain.setValueAtTime(1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        }
+        function playErrorSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15); 
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // --- TIMER ---
+        let timerInterval;
+        function startTimer() {
+            let tc = document.getElementById('timer-container');
+            tc.style.display = 'block';
+            // Time: Easy 40s, Hard 25s (For Class 8 reading)
+            let duration = currentLevel === 1 ? 40 : 25; 
+            let timeLeft = duration;
+            document.getElementById('timer-bar').style.width = '100%';
+            document.getElementById('timer-bar').style.backgroundColor = '#4CAF50';
+            document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer-text').innerText = `⏳ ${timeLeft}`;
+                let pct = (timeLeft / duration) * 100;
+                document.getElementById('timer-bar').style.width = pct + '%';
+                if(pct <= 30) document.getElementById('timer-bar').style.backgroundColor = '#F44336';
+                else if(pct <= 60) document.getElementById('timer-bar').style.backgroundColor = '#FF9800';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    playErrorSound();
+                    instruction.style.color = 'red';
+                    instruction.innerHTML = "સમય પૂરો! (Time's Up!) ⏰";
+                    tc.style.display = 'none'; 
+                    document.querySelectorAll('.ans-btn').forEach(btn => { btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6';});
+                }
+            }, 1000);
+        }
+
+        function hideTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('timer-container').style.display = 'none';
+        }
+
+        // --- NAVIGATION ---
+        function toggleTheme() { isDarkMode = !isDarkMode; document.body.setAttribute('data-theme', isDarkMode ? 'dark' : ''); }
+        function showMenu() {
+            hideTimer();
+            document.getElementById('menu-view').style.display = 'grid';
+            document.getElementById('menu-header').style.display = 'block';
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('nav-home-btn').style.display = 'none';
+            document.getElementById('nav-title').innerText = 'ધોરણ ૮ (Class 8)';
+        }
+        function setLevel(lvl) {
+            currentLevel = lvl;
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-lvl-${lvl}`).classList.add('active');
+        }
+        function showGameUI(title, guideText) {
+            hideTimer();
+            document.getElementById('menu-view').style.display = 'none';
+            document.getElementById('menu-header').style.display = 'none';
+            document.getElementById('game-view').style.display = 'block';
+            document.getElementById('nav-home-btn').style.display = 'inline-block';
+            document.getElementById('nav-title').innerText = title + (currentLevel === 1 ? ' (સરળ)' : ' (અઘરું)');
+            document.getElementById('guide-box').innerText = guideText;
+            gameArea.innerHTML = ''; controls.innerHTML = '';
+        }
+        function setGameControls(restartFunc) {
+            controls.innerHTML = `<button class="action-btn" onclick="${restartFunc}">ફરી રમો 🔄</button> <button class="action-btn menu-return-btn" onclick="showMenu()">મેનૂમાં પાછા 🏠</button>`;
+        }
+        function showWinState() {
+            hideTimer(); instruction.innerHTML = ""; 
+            let randomMsg = winMessages[Math.floor(Math.random() * winMessages.length)];
+            gameArea.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; animation: float 2s infinite;"><div style="font-size: 80px; margin-bottom: 10px;">🏆</div><h2 style="color:var(--display-color); font-size: 36px; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);">${randomMsg}</h2></div>`;
+        }
+
+        // --- MAIN STARTER ---
+        function startGame(type) {
+            currentGameType = type;
+            // Math
+            if (type === 'squares') initSquareGame();
+            if (type === 'cubes') initCubeGame();
+            if (type === 'equations') initEquationGame();
+            if (type === 'geometry') playSpecificQARound('૪. ચતુષ્કોણ-ભૂમિતિ', 'ભૂમિતિના પ્રશ્નનો સાચો જવાબ આપો!', quadData);
+            
+            // Gujarati Grammar
+            if (type === 'sandhi') playSpecificQARound('૫. સંધિ અને સમાસ', 'સાચો વિકલ્પ પસંદ કરો!', sandhiData);
+            if (type === 'sentences') playSpecificQARound('૬. વાક્યના પ્રકાર', 'વાક્યનો સાચો પ્રકાર ઓળખો!', sentenceData);
+            if (type === 'idioms') playSpecificQARound('૭. રૂઢિપ્રયોગો', 'રૂઢિપ્રયોગનો સાચો અર્થ શોધો!', idiomsData);
+            if (type === 'proverbs') playSpecificQARound('૮. કહેવતો', 'આપેલી કહેવત પૂરી કરો!', proverbsData);
+            
+            // Science
+            if (type === 'sci_metals') playSpecificQARound('૯. ધાતુ - અધાતુ', 'રસાયણ વિજ્ઞાનનો સાચો જવાબ આપો!', sciMetalsData);
+            if (type === 'sci_force') playSpecificQARound('૧૦. બળ અને દબાણ', 'ભૌતિક વિજ્ઞાનનો સાચો જવાબ આપો!', sciForceData);
+            if (type === 'sci_light') playSpecificQARound('૧૧. પ્રકાશ અને ધ્વનિ', 'પ્રકાશ અને અવાજ વિશે સાચો વિકલ્પ પસંદ કરો!', sciLightData);
+            if (type === 'sci_microbes') playSpecificQARound('૧૨. સૂક્ષ્મજીવો', 'જીવવિજ્ઞાન વિશે સાચો જવાબ આપો!', sciMicrobesData);
+            
+            // Social Science & English
+            if (type === 'ss_const') playSpecificQARound('૧૩. આપણું બંધારણ', 'ભારતના બંધારણ વિશે સાચો જવાબ આપો!', constitutionData);
+            if (type === 'ss_history') playSpecificQARound('૧૪. આધુનિક ભારત', 'ભારતના ઇતિહાસ વિશે સાચો જવાબ આપો!', historyData);
+            if (type === 'eng_voice') playSpecificQARound('૧૫. Active-Passive', 'Choose the correct Passive/Active Voice!', engVoiceData);
+            if (type === 'eng_vocab') playSpecificQARound('૧૬. Eng Vocab', 'અંગ્રેજી શબ્દાર્થ અને વ્યાકરણ!', engVocabData);
+        }
+
+        // ==========================================
+        // DYNAMIC MATH GAMES LOGIC
+        // ==========================================
+
+        // 1. Squares & Square Roots (વર્ગ અને વર્ગમૂળ)
+        function initSquareGame() {
+            showGameUI('૧. વર્ગ-વર્ગમૂળ', 'આપેલી સંખ્યાનો વર્ગ કે વર્ગમૂળ શોધો!'); 
+            setGameControls("startGame('squares')");
+            
+            let isRoot = Math.random() > 0.5;
+            let maxBase = currentLevel === 1 ? 15 : 30;
+            let base = Math.floor(Math.random() * maxBase) + 2; 
+            
+            let ans, qText;
+            if(isRoot) {
+                let square = base * base;
+                ans = base;
+                qText = `√${toGuj(square)} = ?`;
+            } else {
+                ans = base * base;
+                qText = `${toGuj(base)}² = ?`;
+            }
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `જવાબ આપો!`;
+            gameArea.innerHTML = `<div class="math-eq">${qText}</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = ans + (Math.floor(Math.random() * 20) - 10); 
+                if(r > 0 && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 2. Cubes & Cube Roots (ઘન અને ઘનમૂળ)
+        function initCubeGame() {
+            showGameUI('૨. ઘન-ઘનમૂળ', 'આપેલી સંખ્યાનો ઘન કે ઘનમૂળ શોધો!'); 
+            setGameControls("startGame('cubes')");
+            
+            let isRoot = Math.random() > 0.5;
+            let maxBase = currentLevel === 1 ? 10 : 15;
+            let base = Math.floor(Math.random() * maxBase) + 2; 
+            
+            let ans, qText;
+            if(isRoot) {
+                let cube = base * base * base;
+                ans = base;
+                qText = `∛${toGuj(cube)} = ?`;
+            } else {
+                ans = base * base * base;
+                qText = `${toGuj(base)}³ = ?`;
+            }
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `જવાબ આપો!`;
+            gameArea.innerHTML = `<div class="math-eq">${qText}</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = ans + (Math.floor(Math.random() * 30) - 15); 
+                if(r > 0 && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // 3. Linear Equations (એક ચલ સુરેખ સમીકરણ)
+        function initEquationGame() {
+            showGameUI('૩. સુરેખ સમીકરણ', 'સમીકરણ ઉકેલીને x ની કિંમત શોધો!'); 
+            setGameControls("startGame('equations')");
+            
+            // Format: ax + b = c
+            let a = Math.floor(Math.random() * 8) + 2; // 2 to 9
+            let ans = Math.floor(Math.random() * 15) + 2; // The value of x
+            let isMinus = Math.random() > 0.5;
+            let b = Math.floor(Math.random() * 20) + 1; 
+            
+            let c = isMinus ? (a * ans) - b : (a * ans) + b;
+            let opSign = isMinus ? '-' : '+';
+            
+            instruction.style.color = 'var(--display-color)'; instruction.innerHTML = `x = ?`;
+            gameArea.innerHTML = `<div class="math-eq">${toGuj(a)}x ${opSign} ${toGuj(b)} = ${toGuj(c)}</div>`;
+            
+            let options = [ans];
+            while(options.length < getOptCount()) { 
+                let r = ans + (Math.floor(Math.random() * 14) - 7); 
+                if(r > 0 && r !== ans && !options.includes(r)) options.push(r); 
+            }
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            options.forEach(opt => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; btn.innerText = toGuj(opt);
+                btn.onclick = function() { 
+                    hideTimer();
+                    if(opt === ans){ playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; } 
+                }; bc.appendChild(btn);
+            }); gameArea.appendChild(bc);
+            startTimer();
+        }
+
+        // Specific QA function (Uses predefined wrong options array 'w')
+        function playSpecificQARound(title, guide, dataset) {
+            showGameUI(title, guide); 
+            setGameControls(`startGame('${currentGameType}')`);
+            
+            let targetIdx = Math.floor(Math.random() * dataset.length);
+            let targetItem = dataset[targetIdx];
+
+            instruction.style.color = 'var(--display-color)'; 
+            instruction.innerHTML = 'સાચો જવાબ પસંદ કરો!';
+            
+            // Smaller font for English Voice or long questions
+            let fSize = title.includes('Active') ? '22px' : '26px';
+            gameArea.innerHTML = `<div class="math-eq" style="font-size:${fSize};">${targetItem.q}</div>`;
+            
+            let optsCount = getOptCount(); 
+            let options = [targetItem.a];
+            let pool = [...targetItem.w].sort(() => 0.5 - Math.random());
+            
+            let maxToAdd = Math.min(optsCount - 1, pool.length);
+            for(let i=0; i<maxToAdd; i++) options.push(pool[i]);
+            options.sort(() => 0.5 - Math.random());
+            
+            let bc = document.createElement('div');
+            // Allow column layout for long English answers
+            if(title.includes('Active')) {
+                bc.style.display = 'flex'; bc.style.flexDirection = 'column'; bc.style.alignItems = 'center';
+            }
+            
+            options.forEach((optText) => {
+                let btn = document.createElement('button'); btn.className = 'ans-btn'; 
+                btn.style.fontSize = title.includes('Active') ? '16px' : '18px'; 
+                if(title.includes('Active')) btn.style.width = '100%';
+                btn.innerText = optText;
+                btn.onclick = function() {
+                    hideTimer();
+                    if (optText === targetItem.a) { playPopSound(); showWinState(); } 
+                    else { playErrorSound(); this.classList.remove('shake'); void this.offsetWidth; this.classList.add('shake'); this.style.background='#ffcccc'; }
+                }; bc.appendChild(btn);
+            });
+            gameArea.appendChild(bc);
+            startTimer(); 
+        }
+
+    </script>
+</body>
+</html>
